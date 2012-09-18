@@ -8,12 +8,9 @@ import java.net.URLEncoder;
 import org.apache.commons.codec.binary.Base64;
 
 public class BingSearchProvider extends SearchProvider {	
-	private static final String apiKey = "troBf72dETWWVPyZCL5wDCZbiOQgss+cMMPEE3Yf3Ho=";
 	private static final String bingUrl = "https://api.datamarket.azure.com/Data.ashx/Bing/Search/v1/Web?Query=";
-	private static final int topK = 10;
 	
-	public BingSearchProvider() {
-	}
+	public BingSearchProvider(String apikey, int topk) { super(apikey, topk); }
 	
 	private String constructQueryUrl(String[] query) {
 		String queryUrl = bingUrl;
@@ -29,6 +26,7 @@ public class BingSearchProvider extends SearchProvider {
 		return queryUrl;
 	}
 	
+	// return an xml file of the query result
 	public String search(String[] query) throws IOException{
 		byte[] accountKeyBytes = Base64.encodeBase64((apiKey + ":" + apiKey).getBytes());
 		String accountKeyEnc = new String(accountKeyBytes);
