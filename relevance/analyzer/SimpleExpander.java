@@ -11,11 +11,13 @@ import org.apache.lucene.util.Version;
 
 import query.QueryRecord;
 
-public class SimpleAnalyzer extends Analyzer {
-	public SimpleAnalyzer(String[] query) { super(query); }	
+public class SimpleExpander extends Expander {
+	protected Vector<String> expandedQuery = new Vector<String>();
+	
+	public SimpleExpander(String[] query) { super(query); }	
 	
 	@Override
-	public String[] expand(Vector<QueryRecord> parsedResult, boolean[] feedbacks) {
+	public String[] expand(Vector<QueryRecord> results, boolean[] feedbacks, String[] query) {
 		StandardAnalyzer sa = new StandardAnalyzer(Version.LUCENE_CURRENT);
 		Set stopWordSet = sa.getStopwordSet();
 		
@@ -27,7 +29,7 @@ public class SimpleAnalyzer extends Analyzer {
 				continue;
 			
 			// count word frequency
-			String[] words = parsedResult.get(i).getDescription().split("\\s+");
+			String[] words = results.get(i).getDescription().split("\\s+");
 			for (String word : words) {				
 				word = word.replaceAll("[^a-zA-Z0-9]", "").toLowerCase(); // remove all non-alphanumeric chars
 				if (stopWordSet.contains(word)) // skip stop words
@@ -48,8 +50,9 @@ public class SimpleAnalyzer extends Analyzer {
 		}		
 		expandedQuery.add(newWord);
 		
-		Vector<String> newQuery = new Vector<String>(Arrays.asList(originQuery));
+		Vector<String> newQuery = new Vector<String>(Arrays.asList(basicQuery));
 		newQuery.addAll(expandedQuery);
 		return newQuery.toArray(new String[0]);
 	}
+
 }

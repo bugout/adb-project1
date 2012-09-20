@@ -4,8 +4,9 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Vector;
 
-import analyzer.Analyzer;
-import analyzer.SimpleAnalyzer;
+import analyzer.Expander;
+import analyzer.SimpleExpander;
+import analyzer.TermRateExpander;
 import query.*;
 
 import searcher.*;
@@ -19,13 +20,11 @@ public class RelevanceFeedback {
 	// Usage: RelevanceFeedback <ApiKey> <topK> <precision> <'query'>
 	public static void main(String[] args) throws Exception {					
 		readArguments(args);
-	
-		//System.err.println(Arrays.toString(basicQuery));
-		
+			
 		// searcher
 		SearchProvider seacher = new BingSearchProvider(apiKey, topK);		
 		// analyzer
-		Analyzer analyzer = new SimpleAnalyzer(basicQuery);		
+		Expander analyzer = new TermRateExpander(basicQuery);		
 		// query parser
 		QueryResultParser queryParser = new QueryResultParser();
 
@@ -47,11 +46,11 @@ public class RelevanceFeedback {
 			feedbacks = getFeedbacks(parsedResult);	
 			
 			precision = computePrecision(feedbacks);
-			if (meetPrecision(precision))
+			if (stopExpansion(precision))
 				break;
 			
 			// use feedback and query result to expand query
-			query = analyzer.expand(parsedResult, feedbacks);	
+			query = analyzer.expand(parsedResult, feedbacks, query);	
 		} 
 		
 		// Output
@@ -59,13 +58,12 @@ public class RelevanceFeedback {
 	}
 	
 	
-	private static boolean meetPrecision(double precision) {
+	private static boolean stopExpansion(double precision) {
 		if (precision >= targetPrecision)
 			return true;
 		else
 			return false;
 	}
-
 
 	private static double computePrecision(boolean[] feedbacks) {
 		int positive = 0;
