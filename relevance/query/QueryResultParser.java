@@ -13,7 +13,7 @@ import org.xml.sax.SAXException;
 //Loop first 10 web entries
 
 public class QueryResultParser {
-	
+	//parses xml data that is contained in xmlContent	
 	public Vector<QueryRecord> parseQueryResult(String xmlContent) {
 		Vector<QueryRecord> theRecords = new Vector<QueryRecord>();
 		
