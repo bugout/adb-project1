@@ -1,23 +1,25 @@
 package query;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.Vector;
 
 import javax.xml.parsers.*;
 
 import org.w3c.dom.*;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 //Loop first 10 web entries
 
 public class QueryResultParser {
 	
-	public Vector<QueryRecord> parseQueryResult(String fileName) {
+	public Vector<QueryRecord> parseQueryResult(String xmlContent) {
 		Vector<QueryRecord> theRecords = new Vector<QueryRecord>();
 		
 		try {
 			DocumentBuilder theBuilder = (DocumentBuilderFactory.newInstance()).newDocumentBuilder();
-			Document theDoc = theBuilder.parse(fileName);
+			Document theDoc = theBuilder.parse(new InputSource(new StringReader(xmlContent)));
 			theDoc.getDocumentElement().normalize();
 			
 			NodeList nList = theDoc.getElementsByTagName("content");
@@ -27,10 +29,12 @@ public class QueryResultParser {
 			{
 				Element elmt = (Element) nList.item(i);
 				String title = getTagValue("d:Title", elmt);
+				System.out.println(title);
 				String url = getTagValue("d:Url", elmt);
 				String displayUrl = getTagValue("d:DisplayUrl", elmt);
 				String description = getTagValue("d:Description", elmt);
-				theRecords.add(new QueryRecord(title, url, displayUrl, description));				
+				theRecords.add(new QueryRecord(title, url, displayUrl, description));	
+				
 			}
 			
 		} catch (ParserConfigurationException e) {
