@@ -14,5 +14,5 @@ public abstract class TermAnalyzer {
 		basicQuery = query;
 	}
 		
-	public abstract Map<String, Double> rateTerms(Vector<QueryRecord> results, boolean[] feedbacks, String[] query);
+	public abstract Map<String, Double> rateTerms(Vector<QueryRecord> results, String[] query);
 }

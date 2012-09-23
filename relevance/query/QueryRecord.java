@@ -6,6 +6,7 @@ public class QueryRecord {
 	private String url;
 	private String displayUrl;
 	private String description;
+	private boolean relevant;
 	
 	public QueryRecord(String title, String url, String displayUrl, String description)
 	{
@@ -30,4 +31,11 @@ public class QueryRecord {
 		return description;
 	}
 
+	public void setFeedback(boolean feedback) {
+		relevant = feedback;
+	}
+	
+	public boolean isRelevant() {
+		return relevant;
+	}
 }

@@ -30,14 +30,14 @@ public class TermRateExpander extends Expander {
 	}
 
 	@Override
-	public String[] expand(Vector<QueryRecord> results, boolean[] feedbacks, String[] query) {
+	public String[] expand(Vector<QueryRecord> results, String[] query) {
 		String[] newQuery = null;
 		
 		// sum up the scores of each term in all analyzers
 		Map<String, Double> termRates = new HashMap<String, Double>();				
 		for (TermAnalyzer analyzer : analyzers) {	
 			// Rate each term with one analyzer
-			Map<String, Double> singleRate = analyzer.rateTerms(results, feedbacks, query);
+			Map<String, Double> singleRate = analyzer.rateTerms(results, query);
 			
 			// Update the score sum
 			for (Map.Entry<String, Double> tr : singleRate.entrySet()){

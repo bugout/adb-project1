@@ -22,12 +22,11 @@ public class WikiTermAnalyzer extends TermAnalyzer {
 	}
 
 	@Override
-	public Map<String, Double> rateTerms(Vector<QueryRecord> results,
-			boolean[] feedbacks, String[] query) {
+	public Map<String, Double> rateTerms(Vector<QueryRecord> results, String[] query) {
 		// Find wikipedia pages in the query result
 		Vector<QueryRecord> positives = new Vector<QueryRecord>();
 		Vector<QueryRecord> negatives = new Vector<QueryRecord>();
-		findWikiPages(results, feedbacks, positives, negatives);
+		findWikiPages(results, positives, negatives);
 		
 		// Check postive wikipedia pages in the query result
 		analyzePositive(positives, query);
@@ -95,12 +94,11 @@ public class WikiTermAnalyzer extends TermAnalyzer {
 	}
 	
 	
-	private void findWikiPages(Vector<QueryRecord> results, boolean[] feedbacks,
-			Vector<QueryRecord> positives, Vector<QueryRecord> negatives) {
+	private void findWikiPages(Vector<QueryRecord> results, Vector<QueryRecord> positives, Vector<QueryRecord> negatives) {
 		for (int i = 0; i < results.size(); i++) {
 			QueryRecord result = results.get(i);
 			if (result.getUrl().matches("wikipedia\\.org")) {
-				if (feedbacks[i] == true)
+				if (results.get(i).isRelevant() == true)
 					positives.add(result);
 				else
 					negatives.add(result);

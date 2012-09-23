@@ -29,7 +29,6 @@ public class RelevanceFeedback {
 		int rounds = 0;
 		double precision = 0;
 		String[] query = basicQuery;
-		boolean[] feedbacks = new boolean[topK];
 		while (true)  {					
 			// begin a new round
 			rounds++;
@@ -41,14 +40,14 @@ public class RelevanceFeedback {
 			Vector<QueryRecord> parsedResult = queryParser.parseQueryResult(result); 
 			
 			// get feedbacks from the user
-			feedbacks = getFeedbacks(parsedResult);	
+			getFeedbacks(parsedResult);	
 			
-			precision = computePrecision(feedbacks);
+			precision = computePrecision(parsedResult);
 			if (stopExpansion(precision))
 				break;
 			
 			// use feedback and query result to expand query
-			query = analyzer.expand(parsedResult, feedbacks, query);	
+			query = analyzer.expand(parsedResult, query);	
 		} 
 		
 		// Output
@@ -63,37 +62,36 @@ public class RelevanceFeedback {
 			return false;
 	}
 
-	private static double computePrecision(boolean[] feedbacks) {
+	private static double computePrecision(Vector<QueryRecord> results) {
 		int positive = 0;
-		for (int i = 0; i < feedbacks.length; i++) {
-			if (feedbacks[i] == true)
+		for (int i = 0; i < results.size(); i++) {
+			if (results.get(i).isRelevant())
 				positive++;
 		}
-		return 1.0 * positive / feedbacks.length;
+		return 1.0 * positive / results.size();
 	}
 
 
 	// list each result and ask for a feedback
-	private static boolean[] getFeedbacks(Vector<QueryRecord> parsedResult) {		
-		boolean[] feedbacks = new boolean[parsedResult.size()];	
+	private static void getFeedbacks(Vector<QueryRecord> parsedResults) {		
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
-		for (int i = 0; i < parsedResult.size(); i++) {
+		for (int i = 0; i < parsedResults.size(); i++) {
 			System.out.printf("Result %d\n", i + 1);
 			System.out.println("-----------------------------");
-			System.out.printf("Title: %s\n", parsedResult.get(i).getTitle());
-			System.out.printf("Url: %s\n", parsedResult.get(i).getUrl());
-			System.out.printf("Description: %s\n", parsedResult.get(i).getDescription());
+			System.out.printf("Title: %s\n", parsedResults.get(i).getTitle());
+			System.out.printf("Url: %s\n", parsedResults.get(i).getUrl());
+			System.out.printf("Description: %s\n", parsedResults.get(i).getDescription());
 			while (true) {
 				System.out.print("Relevance(Y/N)? :");
 				try {
 					String answer = br.readLine();
 					if (answer.startsWith("Y") || answer.startsWith("y")) {
-						feedbacks[i] = true;			
+						parsedResults.get(i).setFeedback(true);
 						break;
 					}
 					else if (answer.startsWith("N") || answer.startsWith("n")) {
-						feedbacks[i] = false;
+						parsedResults.get(i).setFeedback(false);
 						break;
 					}
 					else
@@ -105,7 +103,6 @@ public class RelevanceFeedback {
 			}
 			System.out.println("-----------------------------");
 		}
-		return feedbacks;
 	}
 	
 	private static void readArguments(String[] args) {
