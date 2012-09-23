@@ -5,10 +5,8 @@ import java.util.Arrays;
 import java.util.Vector;
 
 import analyzer.Expander;
-import analyzer.SimpleExpander;
 import analyzer.TermRateExpander;
 import query.*;
-
 import searcher.*;
 
 public class RelevanceFeedback {
