@@ -21,6 +21,7 @@ public class TermRateExpander extends Expander {
 	}
 	
 	private void registerAnalyzers() {
+		registerAnalyzer(new MetaTermAnalyzer(basicQuery));
 		registerAnalyzer(new WikiTermAnalyzer(basicQuery));
 	}
 	
@@ -31,8 +32,6 @@ public class TermRateExpander extends Expander {
 
 	@Override
 	public String[] expand(Vector<QueryRecord> results, String[] query) {
-		String[] newQuery = null;
-		
 		// sum up the scores of each term in all analyzers
 		Map<String, Double> termRates = new HashMap<String, Double>();				
 		for (TermAnalyzer analyzer : analyzers) {	
@@ -51,15 +50,19 @@ public class TermRateExpander extends Expander {
 		// Pick the term that has the highest sum ratings
 		String expandTerm = null;
 		double maxScore = Double.MIN_VALUE;		
-		for (Map.Entry<String, Double> tr : termRates.entrySet()) {
-			if (tr.getValue() > maxScore) {
+		
+		List<String> currentQuery = Arrays.asList(query);
+		for (Map.Entry<String, Double> tr : termRates.entrySet()) {			
+			if (tr.getValue() > maxScore && !currentQuery.contains(tr.getKey())) {
 				maxScore = tr.getValue();
 				expandTerm = tr.getKey();
 			}
 		}
 		
+		System.out.println("Expanding terms :" + expandTerm);
+		
 		// Append the expanded term to the end of the previous query
-		List<String> newquery = Arrays.asList(query);
+		List<String> newquery = new ArrayList(Arrays.asList(query));
 		newquery.add(expandTerm);
 		
 		return newquery.toArray(new String[0]);		

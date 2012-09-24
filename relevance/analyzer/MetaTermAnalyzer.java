@@ -43,6 +43,10 @@ public class MetaTermAnalyzer extends TermAnalyzer {
 			}
 		}
 		
+		for (Map.Entry<String, Double> entry : overallRates.entrySet()) {
+			System.out.println(entry.getKey() + " - " + entry.getValue());
+		}
+		
 		return overallRates;
 	}
 	
@@ -57,10 +61,12 @@ public class MetaTermAnalyzer extends TermAnalyzer {
 			title = title.toLowerCase();
 			String[] words = title.split("\\s+");
 			for (String word : words) {
-				if (StopWord.StopWordList().contains(word))
-					continue;
 				word = word.replaceAll("[^a-z0-9]", "");
-				wordCount++;
+				if (word.length() == 0 || StopWord.StopWordList().contains(word))
+					continue;
+							
+				wordCount++;				 
+				
 				if (!wordFreqs.containsKey(word)) {
 					wordFreqs.put(word, 1);
 				}

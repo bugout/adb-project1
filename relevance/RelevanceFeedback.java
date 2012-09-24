@@ -29,9 +29,11 @@ public class RelevanceFeedback {
 		int rounds = 0;
 		double precision = 0;
 		String[] query = basicQuery;
-		while (true)  {					
+		while (true)  {								
 			// begin a new round
 			rounds++;
+			
+			System.out.println("Searching with keywords: " + Arrays.toString(query));
 			
 			// get search result from a search provider
 			String result = seacher.search(query);
@@ -56,6 +58,8 @@ public class RelevanceFeedback {
 	
 	
 	private static boolean stopExpansion(double precision) {
+		if (precision == 0) // if precision is zero, terminate at once
+			return true;		
 		if (precision >= targetPrecision)
 			return true;
 		else
@@ -132,14 +136,16 @@ public class RelevanceFeedback {
 					System.err.println("Please input a valid query, the query should be enclosed with \"'\"");
 					System.exit(1);
 				}
-				q.add(args[i].substring(1, args[i].length()));
+				q.add(args[i].replaceAll("'", ""));
+				//q.add(args[i].substring(1, args[i].length()));
 			}
-			else if ( i == args.length-1 ) {
+			else if ( i == args.length - 1 ) {
 				if (!args[i].endsWith("'")) {
 					System.err.println("Please input a valid query, the query should be enclosed with \"'\"");
 					System.exit(1);
 				}
-				q.add(args[i].substring(0, args[i].length()-1));
+				q.add(args[i].replaceAll("'", ""));
+				//q.add(args[i].substring(0, args[i].length()-1));
 			}
 			else
 				q.add(args[i]);
@@ -149,8 +155,8 @@ public class RelevanceFeedback {
 	
 	// Print summary after we meet the precision requirement
 	private static void printSummary(int rounds, double precision, String[] query) {
-		System.out.printf("Target precision reached in %d rounds\n");
-		System.out.printf("Precision: %lf\n", precision);
+		System.out.printf("Target precision reached in %d rounds\n", rounds);
+		System.out.printf("Precision: %.2f\n", precision);
 		System.out.printf("Querys: %s\n", Arrays.toString(query));
 	}
 }

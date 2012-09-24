@@ -3,6 +3,8 @@ package indexer;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -14,17 +16,17 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.TermFreqVector;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 
 
 public class Indexer {
 	private IndexWriter writer;
-	private String indexDir;
+	private Directory indexDir; 
 	
-	public Indexer(String indexDir) throws IOException{
-		this.indexDir = indexDir;
-		Directory dir = FSDirectory.open(new File(indexDir));
-		writer = new IndexWriter(dir, new StandardAnalyzer(Version.LUCENE_CURRENT), 
+	public Indexer() throws IOException{
+		this.indexDir = new RAMDirectory();
+		writer = new IndexWriter(this.indexDir, new StandardAnalyzer(Version.LUCENE_CURRENT), 
 				true, IndexWriter.MaxFieldLength.UNLIMITED);
 		
 	}
@@ -51,28 +53,23 @@ public class Indexer {
 		writer.close();
 	}
 	
-	public Vector<String> getTopTerms() {
-
+	
+	// get term frequency
+	public Vector<TermFreq> getTermFreqs() {
 		try {
-			IndexReader reader = null; 
-			reader = IndexReader.open(FSDirectory.open(new File(indexDir)));
+			IndexReader reader = IndexReader.open(indexDir);	
 			Vector<TermFreq> termFreqs = new Vector<TermFreq>();
 			assert(reader.numDocs() == 1);
-			for (int i = 0; i < reader.numDocs(); i++) {				
-				TermFreqVector termVector = reader.getTermFreqVector(i, "content");
-				assert(termVector != null);
-				String[] terms = termVector.getTerms();
-				int[] freqs = termVector.getTermFrequencies();
-
-				for (int j = 0; j < terms.length; j++) {		
-					termFreqs.add(new TermFreq(terms[j], freqs[j]));
-				}			
+			// hard coding here...
+			TermFreqVector termVector = reader.getTermFreqVector(0, "content");
+			assert(termVector != null);
+			String[] terms = termVector.getTerms();
+			int[] freqs = termVector.getTermFrequencies();
+				
+			for (int j = 0; j < terms.length; j++) {		
+				termFreqs.add(new TermFreq(terms[j], freqs[j]));
 			}
-			Collections.sort(termFreqs);
-			Vector<String> terms = new Vector<String>();
-			for (int i = termFreqs.size() -1; i >0 ; i--)
-				terms.add(termFreqs.get(i).term);
-			return terms;
+			return termFreqs;
 		}
 		catch (Exception e){
 			e.printStackTrace();
@@ -80,9 +77,17 @@ public class Indexer {
 		}
 	}
 	
-	class TermFreq implements Comparable<TermFreq> {
+	public class TermFreq implements Comparable<TermFreq> {
 		private String term;
 		private int freq;
+		
+		public String getTerm() {
+			return term;
+		}
+		
+		public int getFreq() {
+			return freq;
+		}
 		
 		public TermFreq(String term, int freq) {
 			this.term = term;
