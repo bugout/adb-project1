@@ -45,11 +45,11 @@ public class QueryRecord {
 		return description;
 	}
 	
-	public boolean getRelevant() {
+	public boolean isRelevant() {
 		return relevant;
 	}
 	
-	public void setRelevant(boolean relevant) {
+	public void setFeedback(boolean relevant) {
 		this.relevant = relevant;
 	}
 
