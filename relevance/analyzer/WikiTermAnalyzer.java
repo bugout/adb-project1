@@ -39,11 +39,6 @@ public class WikiTermAnalyzer extends TermAnalyzer {
 			// do nothing
 		}		
 		
-//		
-//		for (Map.Entry<String, Double> entry : rates.entrySet()) {
-//			System.out.println(entry.getKey() + " - " + entry.getValue());
-//		}
-		
 		return rates;
 	}
 	
@@ -51,6 +46,9 @@ public class WikiTermAnalyzer extends TermAnalyzer {
 	private Map<String, Double> analyzePositive(Vector<QueryRecord> positives, String[] query) {
 		// Building a document repository
 		// rate words using tf-rdf
+		if (positives.size() == 0)
+			return new HashMap<String, Double>();
+		
 		HtmlParser parser = new HtmlParser();
 		Vector<String> documents = new Vector<String>();		
 		for (QueryRecord positive : positives) {
