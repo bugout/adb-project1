@@ -44,7 +44,7 @@ public class MetaTermAnalyzer extends TermAnalyzer {
 		}
 		
 		for (Map.Entry<String, Double> entry : overallRates.entrySet()) {
-			System.out.println(entry.getKey() + " - " + entry.getValue());
+			System.err.println(entry.getKey() + " - " + entry.getValue());
 		}
 		
 		return overallRates;

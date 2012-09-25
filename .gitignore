@@ -1,6 +1,7 @@
 *.class
 
 # Package Files #
+relevance/lib/*
 *.jar
 *.war
 *.ear

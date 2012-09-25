@@ -19,6 +19,8 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 
+import util.StopWord;
+
 
 public class Indexer {
 	private IndexWriter writer;
@@ -26,18 +28,28 @@ public class Indexer {
 	
 	public Indexer() throws IOException{
 		this.indexDir = new RAMDirectory();
-		writer = new IndexWriter(this.indexDir, new StandardAnalyzer(Version.LUCENE_CURRENT), 
+		writer = new IndexWriter(this.indexDir, 
+				new StandardAnalyzer(Version.LUCENE_CURRENT, StopWord.StopWordList()), 
 				true, IndexWriter.MaxFieldLength.UNLIMITED);
 		
+	}
+	
+	public void buildCorpus(String doc) throws IOException {
+		writer.deleteAll();
+		Document d = new Document();
+		d.add(new Field("content", doc, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.YES));
+		writer.addDocument(d);
+		writer.close();
 	}
 		
 	public void buildCorpus(Vector<String> docs) throws IOException {
 		writer.deleteAll();
 		for (String doc : docs) {
 			Document d = new Document();
-			d.add(new Field("content", doc, Field.Store.YES, Field.Index.ANALYZED));
+			d.add(new Field("content", doc, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.YES));
 			writer.addDocument(d);
 		}
+		writer.close();
 	}
 	
 	public void buildAsSingle(Vector<String> docs) throws IOException {
