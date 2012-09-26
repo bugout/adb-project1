@@ -4,10 +4,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
-import global.Global;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+
+import util.Global;
+import util.StopWord;
 
 public class QueryRecord {
 	
@@ -76,7 +78,7 @@ public class QueryRecord {
 		for (String word : wordList) { 				
 			word = word.replaceAll("[^a-zA-Z0-9]", "").toLowerCase(); // remove all non-alphanumeric chars
 			
-			if(Global.stopWords.contains(word))
+			if(StopWord.StopWordList().contains(word))
 				continue;
 			else {
 				list.add(word);
