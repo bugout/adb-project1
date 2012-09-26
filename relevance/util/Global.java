@@ -19,8 +19,10 @@ public class Global {
 		positives.clear();
 		
 		for (QueryRecord result : results)
-			if ( result.isRelevant() )
+			if ( result.isRelevant() ) {
 				positives.add(result);
+				result.downloadRelevantPage();
+			}
 	}
 	
 	public static void setRelevantTerms(Vector<String> terms) {
