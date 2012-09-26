@@ -7,13 +7,18 @@ import java.util.Map;
 import java.util.Vector;
 
 import query.QueryRecord;
+import util.Global;
 import util.StopWord;
 
 // Meta term analyzer will assign score to word according to the description
 public class MetaTermAnalyzer extends TermAnalyzer {
 
 	// there are four components in the meta data
-	// 1. title 2. url 3. display url 4. description
+	// 1. title 2. url 3. display url 4. description	
+	public enum MetaDataType {
+	    TITLE, URL, DISPLAY_URL, DESCRIPTION 
+	};
+	
 	double[] weights = {0.7, 0, 0, 0.3};
 	
 	public MetaTermAnalyzer(String[] query) {
@@ -23,10 +28,10 @@ public class MetaTermAnalyzer extends TermAnalyzer {
 	@Override
 	public Map<String, Double> rateTerms(Vector<QueryRecord> results, String[] query) {		
 		List<Map<String, Double>> rates = new ArrayList<Map<String, Double>>();
-		rates.add(parseTitle(results));
-		rates.add(parseUrl(results));
-		rates.add(parseDisplayUrl(results));
-		rates.add(parseDescription(results));
+		rates.add(parseMetaData(MetaDataType.TITLE));
+		rates.add(parseMetaData(MetaDataType.URL));
+		rates.add(parseMetaData(MetaDataType.DISPLAY_URL));
+		rates.add(parseMetaData(MetaDataType.DESCRIPTION));
 		
 		Map<String, Double> overallRates = new HashMap<String, Double>();
 		
@@ -43,6 +48,7 @@ public class MetaTermAnalyzer extends TermAnalyzer {
 			}
 		}
 		
+		System.err.println("Weight of word in metadata analyzer");
 		for (Map.Entry<String, Double> entry : overallRates.entrySet()) {
 			System.err.println(entry.getKey() + " - " + entry.getValue());
 		}
@@ -50,16 +56,28 @@ public class MetaTermAnalyzer extends TermAnalyzer {
 		return overallRates;
 	}
 	
-	private Map<String, Double> parseTitle(Vector<QueryRecord> results) {		
-		Map<String, Integer> wordFreqs = new HashMap<String, Integer>();		
+	private Map<String, Double> parseMetaData(MetaDataType type) {
+		
+		Map<String, Double> rates = new HashMap<String, Double>();
+		
+		if (type == MetaDataType.URL || type == MetaDataType.DISPLAY_URL)
+			return rates;
+		
+		Map<String, Integer> wordFreqs = new HashMap<String, Integer>();
 		
 		int wordCount = 0;
-		for (int i = 0; i < results.size(); i++) {
-			if (!results.get(i).isRelevant())
-				continue;
-			String title = results.get(i).getTitle();
-			title = title.toLowerCase();
-			String[] words = title.split("\\s+");
+		Vector<QueryRecord> positives = Global.getPositives();
+		for (int i = 0; i < positives.size(); i++) {
+			
+			String metaData = new String("");
+			
+			if (type == MetaDataType.TITLE)
+				metaData = positives.get(i).getTitle();
+			else if (type == MetaDataType.DESCRIPTION)
+				metaData = positives.get(i).getDescription();
+			
+			metaData = metaData.toLowerCase();
+			String[] words = metaData.split("\\s+");
 			for (String word : words) {
 				word = word.replaceAll("[^a-z0-9]", "");
 				if (word.length() == 0 || StopWord.StopWordList().contains(word))
@@ -67,6 +85,7 @@ public class MetaTermAnalyzer extends TermAnalyzer {
 							
 				wordCount++;				 
 				
+				//this calculates the word frequency
 				if (!wordFreqs.containsKey(word)) {
 					wordFreqs.put(word, 1);
 				}
@@ -75,50 +94,14 @@ public class MetaTermAnalyzer extends TermAnalyzer {
 				}
 			}			
 		}
-		
-		Map<String, Double> rates = new HashMap<String, Double>();
+		// for each word, put termFreq/TotalWordCount in the map.	
 		for (Map.Entry<String, Integer> entry : wordFreqs.entrySet()) {
 			rates.put(entry.getKey(), 1.0 * entry.getValue() / wordCount);
 		}
 		
-		return rates;
+		return rates;	
 	}
-	private Map<String, Double> parseUrl(Vector<QueryRecord> results) {
-		return new HashMap<String, Double>();
-	}
-	private Map<String, Double> parseDisplayUrl(Vector<QueryRecord> results) {
-		return new HashMap<String, Double>();
-	}
-	private Map<String, Double> parseDescription(Vector<QueryRecord> results) {
-		Map<String, Integer> wordFreqs = new HashMap<String, Integer>();		
-		
-		int wordCount = 0;
-		for (int i = 0; i < results.size(); i++) {
-			if (!results.get(i).isRelevant())
-				continue;
-			String description = results.get(i).getDescription();
-			description = description.toLowerCase();
-			String[] words = description.split("\\s+");
-			for (String word : words) {
-				if (StopWord.StopWordList().contains(word))
-					continue;
-				word = word.replaceAll("[^a-z0-9]", "");
-				wordCount++;
-				if (!wordFreqs.containsKey(word)) {
-					wordFreqs.put(word, 1);
-				}
-				else {
-					wordFreqs.put(word, wordFreqs.get(word) + 1);
-				}
-			}			
-		}
-		
-		Map<String, Double> rates = new HashMap<String, Double>();
-		for (Map.Entry<String, Integer> entry : wordFreqs.entrySet()) {
-			rates.put(entry.getKey(), 1.0 * entry.getValue() / wordCount);
-		}
-		return rates;
-	}
+	
 	
 	public static void main(String[] args) {
 		Vector<QueryRecord> results = new Vector<QueryRecord>();

@@ -48,7 +48,8 @@ public class TermRateExpander extends Expander {
 			}
 		}	
 		
-		// Pick the term that has the highest sum ratings
+		// Pick the term that has the highest sum ratings and is in 
+		//list of relevant words
 		String expandTerm = null;
 		double maxScore = Double.MIN_VALUE;		
 		

@@ -1,14 +1,11 @@
 package query;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Vector;
 
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import util.Global;
 import util.StopWord;
 
 public class QueryRecord {
@@ -17,7 +14,7 @@ public class QueryRecord {
 	private String url;
 	private String displayUrl;
 	private String description;
-	boolean relevant;
+	private boolean relevant;
 	private String htmlText;
 	
 	public QueryRecord(String title, String url, String displayUrl, String description)
@@ -53,6 +50,7 @@ public class QueryRecord {
 	public void setFeedback(boolean relevant) {
 		this.relevant = relevant;
 	}
+	
 
 	public void downloadRelevantPage() {
 		

@@ -1,10 +1,6 @@
 package util;
 
-import java.util.Set;
 import java.util.Vector;
-
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
-
 import query.QueryRecord;
 
 public class Global {
@@ -13,7 +9,17 @@ public class Global {
 	private static Vector<QueryRecord> positives = new Vector<QueryRecord>(); 
 	
 	private static Vector<String> relevantTerms = new Vector<String>();
+	
+	private static Vector<String> currentQueryForComp = new Vector<String>();
 
+	public static void setCurrentQueryForComp(String[] query) {
+		
+		currentQueryForComp.clear();
+		
+		for (String s : query)
+			currentQueryForComp.add(s.trim().toLowerCase());
+	}
+	
 	public static void setPositives(Vector<QueryRecord> results) {
 		
 		positives.clear();
@@ -40,6 +46,9 @@ public class Global {
 	public static Vector<String> getRelevantTerms() {
 		return relevantTerms;
 	}
-
+	
+	public static Vector<String> getCurrentQuery() {
+		return currentQueryForComp;
+	}
 
 }

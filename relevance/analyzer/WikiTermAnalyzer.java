@@ -1,14 +1,13 @@
 package analyzer;
 
-import indexer.Indexer;
-import indexer.Indexer.TermFreq;
+import indexer.*;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
-import util.HtmlParser;
+import util.*;
 
 import org.apache.lucene.index.CorruptIndexException;
 import org.jsoup.Jsoup;
@@ -26,36 +25,36 @@ public class WikiTermAnalyzer extends TermAnalyzer {
 
 	@Override
 	public Map<String, Double> rateTerms(Vector<QueryRecord> results, String[] query) {
+
 		// Find wikipedia pages in the query result
-		Vector<QueryRecord> positives = new Vector<QueryRecord>();
-		Vector<QueryRecord> negatives = new Vector<QueryRecord>();
-		findWikiPages(results, positives, negatives);
+		Vector<QueryRecord> wikiPages = new Vector<QueryRecord>();
+		
+		for (QueryRecord result : Global.getPositives()) 
+			if (result.getUrl().matches(".*wikipedia\\.org.*")) 
+				wikiPages.addElement(result);
 		
 		// Check postive wikipedia pages in the query result
-		Map<String, Double> rates = analyzePositive(positives, query);
+		Map<String, Double> rates = analyzeWikiPages(wikiPages, query);
 		
-		// Check negative wikipedia pages in the query result
-		for (QueryRecord negative : negatives) {
-			// do nothing
-		}		
+		//DO NOTHING FOR NEGATIVES
 		
 		return rates;
 	}
 	
 	// Parse the html either by Tika or JSoup
-	private Map<String, Double> analyzePositive(Vector<QueryRecord> positives, String[] query) {
+	private Map<String, Double> analyzeWikiPages(Vector<QueryRecord> wikiPages, String[] query) {
 		// Building a document repository
 		// rate words using tf-rdf
-		if (positives.size() == 0)
+		if (wikiPages.size() == 0)
 			return new HashMap<String, Double>();
 		
 		HtmlParser parser = new HtmlParser();
 		Vector<String> documents = new Vector<String>();		
-		for (QueryRecord positive : positives) {
+		for (QueryRecord wikiPage : wikiPages) {
 			Document htmlDoc = null;
 			try {
 				// Download & Parse the webpage
-				htmlDoc = Jsoup.connect(positive.getUrl()).get();			
+				htmlDoc = Jsoup.connect(wikiPage.getUrl()).get();			
 			}
 			catch (Exception e) {
 				e.printStackTrace();
@@ -104,6 +103,7 @@ public class WikiTermAnalyzer extends TermAnalyzer {
 		Collections.sort(termFreqs);
 		Collections.reverse(termFreqs);
 		
+		//get the top 50 words
 		for (int i = 0; i < 50; i++)
 			System.err.println(termFreqs.get(i).getTerm() + " - " + termFreqs.get(i).getFreq());
 		
@@ -112,19 +112,6 @@ public class WikiTermAnalyzer extends TermAnalyzer {
 			rates.put(tf.getTerm(), 1.0 * tf.getFreq() / totalFreq);
 		}
 		return rates;
-	}
-	
-	
-	private void findWikiPages(Vector<QueryRecord> results, Vector<QueryRecord> positives, Vector<QueryRecord> negatives) {
-		for (int i = 0; i < results.size(); i++) {
-			QueryRecord result = results.get(i);
-			if (result.getUrl().matches(".*wikipedia\\.org.*")) {
-				if (results.get(i).isRelevant() == true)
-					positives.add(result);
-				else
-					negatives.add(result);
-			}
-		}
 	}
 	
 	// for now we keep it this way
@@ -145,6 +132,6 @@ public class WikiTermAnalyzer extends TermAnalyzer {
 		Vector<QueryRecord> positives = new Vector<QueryRecord>(1);
 		positives.add(new QueryRecord("bill",url,url,"ddddd"));
 		WikiTermAnalyzer a = new WikiTermAnalyzer(new String[0]);
-		a.analyzePositive(positives, new String[0]);
+		a.analyzeWikiPages(positives, new String[0]);
 	}
 }

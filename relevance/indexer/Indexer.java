@@ -89,30 +89,4 @@ public class Indexer {
 		}
 	}
 	
-	public class TermFreq implements Comparable<TermFreq> {
-		private String term;
-		private int freq;
-		
-		public String getTerm() {
-			return term;
-		}
-		
-		public int getFreq() {
-			return freq;
-		}
-		
-		public TermFreq(String term, int freq) {
-			this.term = term;
-			this.freq = freq;
-		}
-		@Override
-		public int compareTo(TermFreq ot) {
-			if (freq > ot.freq)
-				return 1;
-			else if (freq < ot.freq)
-				return -1;
-			else
-				return 0;
-		}
-	}
 }

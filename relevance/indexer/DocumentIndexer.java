@@ -11,60 +11,57 @@ import org.apache.lucene.document.Field;
 import org.apache.lucene.index.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 
 public class DocumentIndexer {
 
-	private StandardAnalyzer sa;
 	private IndexWriterConfig config;
 	private IndexWriter writer;
 	private IndexReader reader;
-	private String indexDir;
-	private String dirName;
 	private Directory dir;
 	
-	public DocumentIndexer(String name) throws IOException {
-		sa = new StandardAnalyzer(Version.LUCENE_36);
-		config = new IndexWriterConfig(Version.LUCENE_36, sa);
-		this.dirName = name;
-		dir = FSDirectory.open(new File(name));
+	public DocumentIndexer() throws IOException {
+		config = new IndexWriterConfig(Version.LUCENE_36, 
+				new StandardAnalyzer(Version.LUCENE_36));
+		dir = new RAMDirectory();
 		writer = new IndexWriter(dir, config);
 		writer.deleteAll();
 		reader = null;
 	}
 	
-	public void closeWriter() {
+	public void addDocuments(Vector<Vector<String> > allDocumentWords) {	
+		
+		for (Vector<String> docWords : allDocumentWords)
+		{
+			Document theDoc = new Document();
+			
+			for (String s : docWords)
+				theDoc.add(new Field("content", s, Field.Store.YES, 
+						Field.Index.ANALYZED, Field.TermVector.YES));
+			
+			try {
+				writer.addDocument(theDoc);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		try {
 			writer.close();
-		} catch (CorruptIndexException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
 	
-	public void addDocument(Vector<String> documentWords) {
-		
-		Document theDoc = new Document();
-		
-		for (String s : documentWords)
-			theDoc.add(new Field("content", s, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.YES));
-		
-		try {
-			writer.addDocument(theDoc);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	public Vector<Vector<TermFreq> > getTermFrequencies() {
 		
 		Vector<Vector<TermFreq> > retVal = new Vector<Vector<TermFreq> >();
 		try {
-			reader = IndexReader.open(FSDirectory.open(new File(dirName)));
+			reader = IndexReader.open(dir);
 		} catch (CorruptIndexException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

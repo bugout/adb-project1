@@ -1,7 +1,6 @@
 package analyzer;
 
-import indexer.Indexer;
-import indexer.Indexer.TermFreq;
+import indexer.*;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -20,6 +19,7 @@ import org.jsoup.nodes.Document;
 import opennlp.tools.sentdetect.*;
 
 import query.QueryRecord;
+import util.Global;
 import util.HtmlParser;
 
 
@@ -97,10 +97,7 @@ public class SentenceTermAnalyzer extends TermAnalyzer {
 	public Map<String, Double> rateTerms(Vector<QueryRecord> results,
 			String[] query) {			
 		// find relevant docs		
-		Vector<QueryRecord> positives = new Vector<QueryRecord>();
-		for (QueryRecord r : results) 
-			if (r.isRelevant())
-				positives.add(r);
+		Vector<QueryRecord> positives = Global.getPositives();
 		
 		Vector<String> docs = new Vector<String>();
 		for (QueryRecord r : positives) {
