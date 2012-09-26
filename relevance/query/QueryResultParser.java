@@ -29,7 +29,6 @@ public class QueryResultParser {
 			{
 				Element elmt = (Element) nList.item(i);
 				String title = getTagValue("d:Title", elmt);
-				System.out.println(title);
 				String url = getTagValue("d:Url", elmt);
 				String displayUrl = getTagValue("d:DisplayUrl", elmt);
 				String description = getTagValue("d:Description", elmt);
