@@ -28,9 +28,8 @@ public class QueryRecord {
 		this.description = description;
 		relevant = false;
 		htmlText = "";
-		
-		downloadRelevantPage();
 	}
+	
 	public String getTitle() {
 		return title;
 	}
@@ -55,7 +54,7 @@ public class QueryRecord {
 		this.relevant = relevant;
 	}
 
-	private void downloadRelevantPage() {
+	public void downloadRelevantPage() {
 		
 		try {
 			Document htmlDoc = Jsoup.connect(url).get();
