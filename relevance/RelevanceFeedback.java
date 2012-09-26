@@ -14,7 +14,7 @@ import util.Global;
 
 public class RelevanceFeedback {
 	private static String apiKey;
-	private static int topK = 0;
+	private static int topK = 10;
 	private static double targetPrecision;
 	private static String[] basicQuery;
 	
@@ -30,6 +30,8 @@ public class RelevanceFeedback {
 		//DocumentComparator
 		DocumentComparator dc = new DocumentComparator();
 		
+		
+		
 		// query parser
 		QueryResultParser queryParser = new QueryResultParser();
 
@@ -39,7 +41,7 @@ public class RelevanceFeedback {
 		while (true)  {								
 			// begin a new round
 			rounds++;
-			
+			Global.setCurrentQueryForComp(query);
 			System.out.println("Searching with keywords: " + Arrays.toString(query));
 			
 			// get search result from a search provider
@@ -58,6 +60,13 @@ public class RelevanceFeedback {
 			//they get updated whenever we have a new round
 			Global.setPositives(parsedResult);
 			dc.setRelevantTerms();
+			
+			System.out.printf("printing relevant terms[ ");
+			for (String s : Global.getRelevantTerms())
+				System.out.printf("%s , ", s);
+			System.out.printf(" ]%n");
+			
+			query = analyzer.expand(parsedResult, basicQuery);
 			
 			precision = computePrecision(parsedResult);
 			if (stopExpansion(precision))
@@ -79,14 +88,9 @@ public class RelevanceFeedback {
 	}
 
 	private static double computePrecision(Vector<QueryRecord> results) {
-		int positive = 0;
-		for (int i = 0; i < results.size(); i++) {
-			if (results.get(i).isRelevant())
-				positive++;
-		}
-		return 1.0 * positive / results.size();
+	
+		return 1.0 * (Global.getPositives().size()) / results.size();
 	}
-
 
 	// list each result and ask for a feedback
 	private static void getFeedbacks(Vector<QueryRecord> parsedResults) {		
@@ -122,13 +126,14 @@ public class RelevanceFeedback {
 	}
 	
 	private static void readArguments(String[] args) {
+	
 		if (args.length < 4) {
 			System.err.println("Usage: RelevanceFeedback <ApiKey> <topK> <precision> <'query'>");
 			System.exit(1);
 		}
-		
-		// get command line arguments
-		apiKey = args[0];		
+
+			// get command line arguments
+		apiKey = args[0];
 		try {
 			topK = Integer.parseInt(args[1]);
 			targetPrecision = Double.parseDouble(args[2]);
@@ -140,7 +145,7 @@ public class RelevanceFeedback {
 		catch (NumberFormatException e) {
 			System.err.println("Please input a valid argument");
 			System.exit(1);
-		}	
+		}
 		Vector<String> q = new Vector<String>();
 		for (int i = 3; i < args.length; i++) {
 			if (i == 3) {
@@ -148,6 +153,7 @@ public class RelevanceFeedback {
 					System.err.println("Please input a valid query, the query should be enclosed with \"'\"");
 					System.exit(1);
 				}
+			
 				q.add(args[i].replaceAll("'", ""));
 				//q.add(args[i].substring(1, args[i].length()));
 			}
@@ -157,12 +163,12 @@ public class RelevanceFeedback {
 					System.exit(1);
 				}
 				q.add(args[i].replaceAll("'", ""));
-				//q.add(args[i].substring(0, args[i].length()-1));
+			//q.add(args[i].substring(0, args[i].length()-1));
 			}
 			else
 				q.add(args[i]);
-		}
-		basicQuery = q.toArray(new String[0]);
+			}
+			basicQuery = q.toArray(new String[0]);
 	}
 	
 	// Print summary after we meet the precision requirement
