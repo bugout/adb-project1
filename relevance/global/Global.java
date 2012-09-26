@@ -19,7 +19,7 @@ public class Global {
 		positives = new Vector<QueryRecord>();
 		
 		for (QueryRecord result : results)
-			if ( result.getRelevant() )
+			if ( result.isRelevant() )
 				positives.add(result);
 	}
 	
@@ -28,7 +28,7 @@ public class Global {
 		negatives = new Vector<QueryRecord>();
 		
 		for (QueryRecord result : results)
-			if ( !result.getRelevant() )
+			if ( !result.isRelevant() )
 				negatives.add(result);
 	}
 	
