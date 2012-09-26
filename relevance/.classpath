@@ -2,12 +2,12 @@
 <classpath>
 	<classpathentry kind="src" path=""/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/home/jiacheng/workspace/adb/adb-project1/relevance/lib/commons-codec-1.6.jar"/>
-	<classpathentry kind="lib" path="/home/jiacheng/workspace/adb/adb-project1/relevance/lib/lucene-core-3.6.1.jar"/>
-	<classpathentry kind="lib" path="/home/jiacheng/workspace/adb/adb-project1/relevance/lib/jsoup-1.6.3.jar"/>
-	<classpathentry kind="lib" path="/home/jiacheng/workspace/adb/adb-project1/relevance/lib/opennlp-tools-1.5.2-incubating.jar"/>
-	<classpathentry kind="lib" path="/home/jiacheng/workspace/adb/adb-project1/relevance/lib/jwnl-1.3.3.jar"/>
-	<classpathentry kind="lib" path="/home/jiacheng/workspace/adb/adb-project1/relevance/lib/opennlp-maxent-3.0.2-incubating.jar"/>
-	<classpathentry kind="lib" path="/home/jiacheng/workspace/adb/adb-project1/relevance/lib/opennlp-uima-1.5.2-incubating.jar"/>
+	<classpathentry kind="lib" path="/usr/local/lib/lucene-3.6.1/lucene-core-3.6.1.jar"/>
+	<classpathentry kind="lib" path="/usr/local/lib/commons-codec-1.7/commons-codec-1.7.jar"/>
+	<classpathentry kind="lib" path="/usr/local/lib/apache-opennlp-1.5.2-incubating/lib/opennlp-maxent-3.0.2-incubating.jar"/>
+	<classpathentry kind="lib" path="/usr/local/lib/apache-opennlp-1.5.2-incubating/lib/opennlp-tools-1.5.2-incubating.jar"/>
+	<classpathentry kind="lib" path="/usr/local/lib/apache-opennlp-1.5.2-incubating/lib/opennlp-uima-1.5.2-incubating.jar"/>
+	<classpathentry kind="lib" path="/usr/local/lib/jsoup-1.7.1.jar"/>
+	<classpathentry kind="lib" path="/usr/local/lib/apache-opennlp-1.5.2-incubating/lib/jwnl-1.3.3.jar"/>
 	<classpathentry kind="output" path=""/>
 </classpath>
