@@ -5,6 +5,7 @@ import indexer.TermFreq;
 
 import java.io.IOException;
 import java.util.*;
+
 import query.QueryRecord;
 import util.Global;
 
@@ -18,34 +19,21 @@ public class DocumentComparator {
 		tf = new Vector<Vector<TermFreq> >();
 	}
 	
-/*	public String[] tempFunc(Vector<QueryRecord> results, String[] query) {
-		
-		rateTerms(results, query);
-		
-		System.out.println("Expanding terms :" + keyWord);
-		
-		// Append the expanded term to the end of the previous query
-		List<String> newquery = new ArrayList(Arrays.asList(query));
-		newquery.add(keyWord);
-		
-		return newquery.toArray(new String[0]);		
-		
-		
-	}*/
-	
 	public void setRelevantTerms() {
 	
 		DocumentIndexer indexer;
+		Vector<Vector<String> > allDocWords = new Vector<Vector<String> >();
 		
 		try {
-			indexer = new DocumentIndexer("TestDirectory");
+			indexer = new DocumentIndexer();
+			
 			for (QueryRecord result : Global.getPositives()) 
 			{
 				Vector<String> list = result.getHtmlPageWords();	
-				indexer.addDocument(list);
+				allDocWords.add(list);
 			}
-			//investigate if a flush can replace close
-			indexer.closeWriter();
+			indexer.addDocuments(allDocWords);
+			
 			tf = indexer.getTermFrequencies();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
@@ -53,34 +41,43 @@ public class DocumentComparator {
 		}
 	
 		Vector<String> relevantTerms = analyzeTermFreq();
-		
 		Global.setRelevantTerms(relevantTerms);
 	}
 	
 	private Vector<String> analyzeTermFreq() {
 		
-		//Needs a better mechanism to analyze terms, rather than just taking a subset of top terms
-		//need to find a way to add weight to top 10 terms
-		//for now - top 10 terms that appear the most across the documents
-		
-		//here frequency is by top terms that appear in most documents, it can't be part of original query
-		
-		//create a map with terms and frequency, example 
+		/* Algorithm to anaylze terms 
+		 * 
+		 *  Step 1 - Count highest frequency words in each relevant document - 
+		 *  Vector<Vector<String> >
+		 *  Step 2 - From these high frequency words, calculate what words 
+		 *  appear in the most documents.  Limit to top 10 words.
+		 *  
+		 */
 		
 		Map<String, Integer> theMap = new HashMap<String, Integer>();
-		for (Vector<TermFreq> doc : tf )
+		for (Vector<TermFreq> theDocument : tf )
 		{
-			for(int i = (doc.size()-1); i > (doc.size() - 11); i--)
+			//insert top 10 words from theDocument to map
+			//the count of the word is increased, depending on how many documents the term 
+			//appears in
+			
+			ListIterator<TermFreq> itr = theDocument.listIterator(theDocument.size());
+			int count = 0;
+			
+			while (itr.hasPrevious() && count < 15)
 			{
-				String term = doc.get(i).getTerm();
-				Integer value = doc.get(i).getFreq();
+				String term = itr.previous().getTerm();
 				
-				if (term.toLowerCase().indexOf("gates") != -1)
-				{ System.out.printf( "ignoring %s%n", term ); }
+				//ignore the term if it is contained in the query
+				if ( Global.getCurrentQuery().contains(term.trim().toLowerCase()) )
+					continue; 
 				else if( theMap.containsKey( term ) )
 					theMap.put(term, theMap.get(term) + 1 );
 				else
 					theMap.put(term, 1);
+				
+				count++;
 			}
 		}
 		
@@ -96,10 +93,14 @@ public class DocumentComparator {
 		
 		Vector<String> retTerms = new Vector<String>();
 		
+		ListIterator<TermFreq> itr = theVec.listIterator(theVec.size());
+		
+		int count = 0;
 		System.out.println(theVec.size());
-		for (int i = 1; i < 11; i++)
-			retTerms.add(theVec.get( (theVec.size() - i) ).getTerm());
-				
+		while (itr.hasPrevious() && count < 50) {
+			retTerms.add(itr.previous().getTerm());
+			count++;
+		}
 		return retTerms;
 		
 	}
