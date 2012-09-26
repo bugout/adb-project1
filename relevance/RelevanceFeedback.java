@@ -1,13 +1,16 @@
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Vector;
 
+import analyzer.DocumentComparator;
 import analyzer.Expander;
 import analyzer.TermRateExpander;
 import query.*;
 import searcher.*;
+import util.Global;
 
 public class RelevanceFeedback {
 	private static String apiKey;
@@ -23,6 +26,10 @@ public class RelevanceFeedback {
 		SearchProvider seacher = new BingSearchProvider(apiKey, topK);		
 		// analyzer
 		Expander analyzer = new TermRateExpander(basicQuery);		
+		
+		//DocumentComparator
+		DocumentComparator dc = new DocumentComparator();
+		
 		// query parser
 		QueryResultParser queryParser = new QueryResultParser();
 
@@ -40,16 +47,21 @@ public class RelevanceFeedback {
 			
 			// Parse query result using XML Parser, extract fields
 			Vector<QueryRecord> parsedResult = queryParser.parseQueryResult(result); 
+
 			
 			// get feedbacks from the user
 			getFeedbacks(parsedResult);	
 			
+			//Setting these to set global positive and negative vectors
+			//base on the user feedback.  This way they can be accessed just by 
+			//calling Global.positives and Global.negatives from throughout the program
+			//they get updated whenever we have a new round
+			Global.setPositives(parsedResult);
+			dc.setRelevantTerms();
+			
 			precision = computePrecision(parsedResult);
 			if (stopExpansion(precision))
 				break;
-			
-			// use feedback and query result to expand query
-			query = analyzer.expand(parsedResult, query);	
 		} 
 		
 		// Output
