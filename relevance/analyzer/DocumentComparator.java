@@ -1,50 +1,45 @@
 package analyzer;
 
-import global.Global;
-
 import indexer.DocumentIndexer;
 import indexer.TermFreq;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
-
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
-import org.apache.lucene.index.CorruptIndexException;
-import org.apache.lucene.index.IndexReader;
-import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.IndexWriterConfig;
-import org.apache.lucene.index.TermFreqVector;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
-
 import query.QueryRecord;
+import util.Global;
 
-public class DocumentComparator extends TermAnalyzer {
+public class DocumentComparator {
 	
 	private Vector<Vector<TermFreq> > tf;
 
-	public DocumentComparator(String[] query) {
-		super(query);
-		
+	public DocumentComparator() {
 		//This vector contains the term frequency (sorted) for each document 
 		//in the positives
 		tf = new Vector<Vector<TermFreq> >();
-		// TODO Auto-generated constructor stub
 	}
-
-	@Override
-	public Map<String, Double> rateTerms(Vector<QueryRecord> results, String[] query) {
-		// TODO Auto-generated method stub
+	
+/*	public String[] tempFunc(Vector<QueryRecord> results, String[] query) {
+		
+		rateTerms(results, query);
+		
+		System.out.println("Expanding terms :" + keyWord);
+		
+		// Append the expanded term to the end of the previous query
+		List<String> newquery = new ArrayList(Arrays.asList(query));
+		newquery.add(keyWord);
+		
+		return newquery.toArray(new String[0]);		
+		
+		
+	}*/
+	
+	public void setRelevantTerms() {
 	
 		DocumentIndexer indexer;
 		
 		try {
 			indexer = new DocumentIndexer("TestDirectory");
-			for (QueryRecord result : Global.positives) 
+			for (QueryRecord result : Global.getPositives()) 
 			{
 				Vector<String> list = result.getHtmlPageWords();	
 				indexer.addDocument(list);
@@ -57,12 +52,12 @@ public class DocumentComparator extends TermAnalyzer {
 			e1.printStackTrace();
 		}
 	
-		analyzeTermFreq();
+		Vector<String> relevantTerms = analyzeTermFreq();
 		
-		return null;
+		Global.setRelevantTerms(relevantTerms);
 	}
 	
-	public void analyzeTermFreq() {
+	private Vector<String> analyzeTermFreq() {
 		
 		//Needs a better mechanism to analyze terms, rather than just taking a subset of top terms
 		//need to find a way to add weight to top 10 terms
@@ -80,7 +75,9 @@ public class DocumentComparator extends TermAnalyzer {
 				String term = doc.get(i).getTerm();
 				Integer value = doc.get(i).getFreq();
 				
-				if( theMap.containsKey( term ) )
+				if (term.toLowerCase().indexOf("gates") != -1)
+				{ System.out.printf( "ignoring %s%n", term ); }
+				else if( theMap.containsKey( term ) )
 					theMap.put(term, theMap.get(term) + 1 );
 				else
 					theMap.put(term, 1);
@@ -94,12 +91,16 @@ public class DocumentComparator extends TermAnalyzer {
 		
 		for (Map.Entry<String, Integer> theEntry : theMap.entrySet())
 			theVec.add(new TermFreq(theEntry.getKey(), theEntry.getValue()));
-		
+
 		Collections.sort(theVec);
 		
-		System.out.println("------------------");
-		for (TermFreq theTF : theVec)
-			System.out.println(theTF.toString());
+		Vector<String> retTerms = new Vector<String>();
+		
+		System.out.println(theVec.size());
+		for (int i = 1; i < 11; i++)
+			retTerms.add(theVec.get( (theVec.size() - i) ).getTerm());
+				
+		return retTerms;
 		
 	}
 }
