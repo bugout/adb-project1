@@ -37,8 +37,7 @@ public class DocumentComparator extends TermAnalyzer {
 	}
 
 	@Override
-	public Map<String, Double> rateTerms(Vector<QueryRecord> results,
-			boolean[] feedbacks, String[] query) {
+	public Map<String, Double> rateTerms(Vector<QueryRecord> results, String[] query) {
 		// TODO Auto-generated method stub
 	
 		DocumentIndexer indexer;
