@@ -20,17 +20,14 @@ public class RelevanceFeedback {
 	
 	// Usage: RelevanceFeedback <ApiKey> <topK> <precision> <'query'>
 	public static void main(String[] args) throws Exception {					
+		
 		readArguments(args);
-			
+		
+		
 		// searcher
 		SearchProvider seacher = new BingSearchProvider(apiKey, topK);		
 		// analyzer
 		Expander analyzer = new TermRateExpander(basicQuery);		
-		
-		//DocumentComparator
-		DocumentComparator dc = new DocumentComparator();
-		
-		
 		
 		// query parser
 		QueryResultParser queryParser = new QueryResultParser();
@@ -38,10 +35,10 @@ public class RelevanceFeedback {
 		int rounds = 0;
 		double precision = 0;
 		String[] query = basicQuery;
-		while (true)  {								
+		while (true)  {				
+						
 			// begin a new round
 			rounds++;
-			Global.setCurrentQueryForComp(query);
 			System.out.println("Searching with keywords: " + Arrays.toString(query));
 			
 			// get search result from a search provider
@@ -49,22 +46,13 @@ public class RelevanceFeedback {
 			
 			// Parse query result using XML Parser, extract fields
 			Vector<QueryRecord> parsedResult = queryParser.parseQueryResult(result); 
-
 			
 			// get feedbacks from the user
 			getFeedbacks(parsedResult);	
 			
-			//Setting these to set global positive and negative vectors
-			//base on the user feedback.  This way they can be accessed just by 
-			//calling Global.positives and Global.negatives from throughout the program
-			//they get updated whenever we have a new round
+			//Setting these to set global positive so that they can be accessed
+			//from any analyzer
 			Global.setPositives(parsedResult);
-			dc.setRelevantTerms();
-			
-			System.out.printf("printing relevant terms[ ");
-			for (String s : Global.getRelevantTerms())
-				System.out.printf("%s , ", s);
-			System.out.printf(" ]%n");
 			
 			query = analyzer.expand(parsedResult, basicQuery);
 			
@@ -89,7 +77,13 @@ public class RelevanceFeedback {
 
 	private static double computePrecision(Vector<QueryRecord> results) {
 	
-		return 1.0 * (Global.getPositives().size()) / results.size();
+		double positives = 0.0;
+		
+		for (QueryRecord result : results)
+			if ( result.isRelevant() ) 
+				positives++;
+		
+		return 1.0 * positives / results.size();
 	}
 
 	// list each result and ask for a feedback
