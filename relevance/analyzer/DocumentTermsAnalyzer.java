@@ -1,6 +1,7 @@
 package analyzer;
 
 import indexer.DocumentIndexer;
+import indexer.Indexer;
 import indexer.TermFreq;
 
 import java.io.IOException;
@@ -15,11 +16,10 @@ import util.Global;
 
 public class DocumentTermsAnalyzer extends TermAnalyzer {
 
-	private Vector<Vector<TermFreq> > tf;
+	private Vector<Vector<TermFreq> > tf = null;
 	
 	public DocumentTermsAnalyzer(String[] query) {
 		super(query);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -28,24 +28,20 @@ public class DocumentTermsAnalyzer extends TermAnalyzer {
 		
 		Map<String, Double> overallRates = new HashMap<String, Double>();
 		
-		DocumentIndexer indexer;
-		Vector<Vector<String> > allDocWords = new Vector<Vector<String> >();
+		//build a vector with all documents html text
+		Vector<String> docs = new Vector<String>();
+		for (QueryRecord result : Global.getPositives())	
+			docs.add(result.getHtmlPage());
 		
-		
+		//build a corpus with all the documents
+		Indexer indexer;
 		try {
-			indexer = new DocumentIndexer();
-			
-			for (QueryRecord result : Global.getPositives()) 
-			{
-				Vector<String> list = result.getHtmlPageWords();	
-				allDocWords.add(list);
-			}
-			indexer.addDocuments(allDocWords);
-			
-			tf = indexer.getTermFrequencies();	
-		} catch (IOException e1) {
+			indexer = new Indexer();
+			indexer.buildCorpus(docs);
+			tf = indexer.getTermFrequencies();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			e.printStackTrace();
 		}
 		
 		overallRates = analyzeTermFreq();

@@ -57,41 +57,4 @@ public class DocumentIndexer {
 	
 	}
 
-	public Vector<Vector<TermFreq> > getTermFrequencies() {
-		
-		Vector<Vector<TermFreq> > retVal = new Vector<Vector<TermFreq> >();
-		try {
-			reader = IndexReader.open(dir);
-		} catch (CorruptIndexException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		for (int i = 0; i < reader.numDocs(); i++) {
-			TermFreqVector tfv = null;
-			try {
-				tfv = reader.getTermFreqVector(i, "content");
-				String[] terms = tfv.getTerms();
-				int[] freq = tfv.getTermFrequencies();
-				Vector<TermFreq> tfVec = new Vector<TermFreq>();
-				
-				for (int k = 0; k < terms.length; k++)
-					tfVec.add(new TermFreq(terms[k], freq[k]));
-				
-				Collections.sort(tfVec);
-				Collections.reverse(tfVec);
-				
-				retVal.add(tfVec);
-				
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-		
-		return retVal;
-	}	
 }

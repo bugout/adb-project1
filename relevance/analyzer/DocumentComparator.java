@@ -36,7 +36,7 @@ public class DocumentComparator {
 			}
 			indexer.addDocuments(allDocWords);
 			
-			tf = indexer.getTermFrequencies();
+			//tf = indexer.getTermFrequencies();
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

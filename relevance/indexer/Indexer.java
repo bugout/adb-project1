@@ -89,4 +89,45 @@ public class Indexer {
 		}
 	}
 	
+	public Vector<Vector<TermFreq> > getTermFrequencies() {
+		
+		Vector<Vector<TermFreq> > retVal = new Vector<Vector<TermFreq> >();
+		
+		try {
+			IndexReader reader = IndexReader.open(indexDir);
+			for (int i = 0; i < reader.numDocs(); i++) {
+				TermFreqVector tfv = null;
+				tfv = reader.getTermFreqVector(i, "content");
+				String[] terms = tfv.getTerms();
+				int[] freq = tfv.getTermFrequencies();
+				Vector<TermFreq> tfVec = new Vector<TermFreq>();
+				
+				for (int k = 0; k < terms.length; k++)
+					tfVec.add(new TermFreq(terms[k], freq[k]));
+				
+				Collections.sort(tfVec);
+				Collections.reverse(tfVec);
+				
+				retVal.add(tfVec);
+				
+				for (int count = 0; count < 11; count++)
+					System.out.printf("Term = %s, Freq = %s%n", 
+							tfVec.get(count).getTerm(), tfVec.get(count).getFreq());
+			}
+		}
+		catch (CorruptIndexException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return retVal;
+	
+	}	
+	
+	
+	
+	
 }
