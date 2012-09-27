@@ -24,6 +24,8 @@ public class DocumentComparator {
 		DocumentIndexer indexer;
 		Vector<Vector<String> > allDocWords = new Vector<Vector<String> >();
 		
+		
+		
 		try {
 			indexer = new DocumentIndexer();
 			
@@ -62,12 +64,12 @@ public class DocumentComparator {
 			//the count of the word is increased, depending on how many documents the term 
 			//appears in
 			
-			ListIterator<TermFreq> itr = theDocument.listIterator(theDocument.size());
+			Iterator<TermFreq> itr = theDocument.iterator();
 			int count = 0;
 			
-			while (itr.hasPrevious() && count < 15)
+			while (itr.hasNext() && count < 15)
 			{
-				String term = itr.previous().getTerm();
+				String term = itr.next().getTerm();
 				
 				//ignore the term if it is contained in the query
 				if ( Global.getCurrentQuery().contains(term.trim().toLowerCase()) )
