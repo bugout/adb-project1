@@ -6,12 +6,14 @@ import indexer.TermFreq;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.Vector;
 
 import query.QueryRecord;
 import util.Global;
 import util.Logger;
 import util.Logger.MsgType;
+import util.MapValueComparator;
 
 public class DocumentTermsAnalyzer extends TermAnalyzer {
 
@@ -47,6 +49,15 @@ public class DocumentTermsAnalyzer extends TermAnalyzer {
 		
 		overallRates = analyzeTermFreq();
 			
+		TreeMap<String, Double> tmap = new TreeMap<String, Double>(
+						new MapValueComparator(overallRates) );
+		
+		tmap.putAll(overallRates);
+		
+		for (Map.Entry<String, Double> entry : tmap.entrySet()) {
+			myLogger.write("term: " + entry.getKey(), MsgType.LOG);
+		}
+		
 		return overallRates;
 	}
 	
