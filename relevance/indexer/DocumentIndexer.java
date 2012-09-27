@@ -82,6 +82,7 @@ public class DocumentIndexer {
 					tfVec.add(new TermFreq(terms[k], freq[k]));
 				
 				Collections.sort(tfVec);
+				Collections.reverse(tfVec);
 				
 				retVal.add(tfVec);
 				
