@@ -21,6 +21,7 @@ public class TermRateExpander extends Expander {
 	}
 	
 	private void registerAnalyzers() {
+		registerAnalyzer(new DocumentTermsAnalyzer(basicQuery));
 		registerAnalyzer(new MetaTermAnalyzer(basicQuery));
 		registerAnalyzer(new WikiTermAnalyzer(basicQuery));
 		registerAnalyzer(new SentenceTermAnalyzer(basicQuery));
