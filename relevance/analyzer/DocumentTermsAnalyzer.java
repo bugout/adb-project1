@@ -1,25 +1,26 @@
 package analyzer;
 
-import indexer.DocumentIndexer;
 import indexer.Indexer;
 import indexer.TermFreq;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Vector;
 
 import query.QueryRecord;
 import util.Global;
+import util.Logger;
+import util.Logger.MsgType;
 
 public class DocumentTermsAnalyzer extends TermAnalyzer {
 
 	private Vector<Vector<TermFreq> > tf = null;
+	private Logger myLogger = null;
 	
 	public DocumentTermsAnalyzer(String[] query) {
 		super(query);
+		myLogger = Logger.getInstance();
 	}
 
 	@Override
@@ -45,12 +46,13 @@ public class DocumentTermsAnalyzer extends TermAnalyzer {
 		}
 		
 		overallRates = analyzeTermFreq();
-		
+			
 		return overallRates;
 	}
 	
 	private Map<String, Double> analyzeTermFreq() {
 		
+		//calcuate tf/(total terms) for each term, and each document
 		Vector<HashMap<String, Double>> mapVec = new Vector<HashMap<String, Double>>();
 		for (Vector<TermFreq> theDocument : tf )
 		{
@@ -61,11 +63,12 @@ public class DocumentTermsAnalyzer extends TermAnalyzer {
 			for (TermFreq theTerm : theDocument)
 				totalTerms = totalTerms + theTerm.getFreq();
 			
+			System.out.println(totalTerms);
+			
 			for (TermFreq theTerm : theDocument)
-			{
-				theMap.put(theTerm.getTerm(), (1.0 * theTerm.getFreq() / totalTerms));				
-				mapVec.add(theMap);
-			}
+				theMap.put(theTerm.getTerm(), (1.0 * theTerm.getFreq() / totalTerms));	
+			
+			mapVec.add(theMap);
 		}
 				
 		Map<String, Double> retval= new HashMap<String, Double>();
@@ -76,8 +79,7 @@ public class DocumentTermsAnalyzer extends TermAnalyzer {
 					retval.put(entry.getKey(), entry.getValue());
 				}
 				else {
-					retval.put(entry.getKey(), 
-							retval.get(entry.getKey()) + entry.getValue());
+					retval.put(entry.getKey(), (retval.get(entry.getKey()) + entry.getValue()) );
 				}
 			}
 		}
