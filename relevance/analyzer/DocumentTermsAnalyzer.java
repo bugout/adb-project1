@@ -50,19 +50,6 @@ public class DocumentTermsAnalyzer extends TermAnalyzer {
 		
 		overallRates = analyzeTermFreq();
 		
-		//print the maxscore
-		Double maxScore = 0.0;
-		String expandTerm = null;
-		for (Map.Entry<String, Double> tr : overallRates.entrySet()) {			
-			if (tr.getValue() > maxScore) {
-				maxScore = tr.getValue();
-				expandTerm = tr.getKey();
-			}
-			
-		}
-		
-		System.out.printf("document term analyzer: %s - %s%n", expandTerm, maxScore);
-		
 		return overallRates;
 	}
 	
@@ -80,13 +67,7 @@ public class DocumentTermsAnalyzer extends TermAnalyzer {
 			
 			for (TermFreq theTerm : theDocument)
 			{
-				String term = theTerm.getTerm();
-				if ( Global.getCurrentQuery().contains(term.trim().toLowerCase()) )
-					continue; 
-				else
-					theMap.put(theTerm.getTerm(), (1.0 * theTerm.getFreq() / totalTerms));				
-				
-				//insert the map in the vector
+				theMap.put(theTerm.getTerm(), (1.0 * theTerm.getFreq() / totalTerms));				
 				mapVec.add(theMap);
 			}
 		}
