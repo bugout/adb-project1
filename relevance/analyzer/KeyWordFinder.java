@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -118,8 +119,13 @@ public class KeyWordFinder {
 				subOriginalQuery.add(s);
 		}
 		
-		for(String s : candidates) {
+		//top 2 words
+		int count = 0;
+		Iterator<String> itr = candidates.iterator();
+		while (itr.hasNext() && count < 2) {
+			String s = itr.next();
 			newQuery.add(new TermFreq(s, wikiTitle.indexOf(s)));
+			count++;
 		}
 			
 		//sort the newQuery vector by values
