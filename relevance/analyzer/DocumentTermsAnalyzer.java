@@ -5,7 +5,10 @@ import indexer.TermFreq;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.Vector;
 
@@ -54,8 +57,15 @@ public class DocumentTermsAnalyzer extends TermAnalyzer {
 		
 		tmap.putAll(overallRates);
 		
-		for (Map.Entry<String, Double> entry : tmap.entrySet()) {
-			myLogger.write("term: " + entry.getKey(), MsgType.LOG);
+		//write the top 10 words to the cop
+		Iterator<Entry<String,Double>> itr = tmap.entrySet().iterator();
+		int count = 0;
+		myLogger.write("********List of top 10 words by Document Terms Analyzer****", 
+				MsgType.LOG);
+		while (itr.hasNext() && count < 10)
+		{
+			myLogger.write("term: " + itr.next().getKey(), MsgType.LOG);
+			count++;
 		}
 		
 		return overallRates;

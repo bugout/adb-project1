@@ -5,8 +5,8 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.Vector;
 
-import analyzer.DocumentComparator;
 import analyzer.Expander;
+import analyzer.KeyWordFinder;
 import analyzer.TermRateExpander;
 import query.*;
 import searcher.*;

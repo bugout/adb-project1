@@ -5,9 +5,14 @@ import indexer.*;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.Vector;
+import java.util.Map.Entry;
+
 import util.*;
+import util.Logger.MsgType;
 
 import org.apache.lucene.index.CorruptIndexException;
 import org.jsoup.Jsoup;
@@ -37,6 +42,24 @@ public class WikiTermAnalyzer extends TermAnalyzer {
 		Map<String, Double> rates = analyzeWikiPages(wikiPages, query);
 		
 		//DO NOTHING FOR NEGATIVES
+		
+		TreeMap<String, Double> tmap = new TreeMap<String, Double>(
+				new MapValueComparator(rates) );
+
+		tmap.putAll(rates);
+		Logger myLogger = Logger.getInstance();
+
+		//write the top 10 words to the cop
+		Iterator<Entry<String,Double>> itr = tmap.entrySet().iterator();
+		int count = 0;
+		myLogger.write("********List of top 10 words by Wiki Terms Analyzer****", 
+				MsgType.LOG);
+		while (itr.hasNext() && count < 10)
+		{
+			myLogger.write("term: " + itr.next().getKey(), MsgType.LOG);
+			count++;
+		}
+	
 		
 		return rates;
 	}
@@ -111,6 +134,7 @@ public class WikiTermAnalyzer extends TermAnalyzer {
 		for (TermFreq tf : termFreqs) {
 			rates.put(tf.getTerm(), 1.0 * tf.getFreq() / totalFreq);
 		}
+		
 		return rates;
 	}
 	

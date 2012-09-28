@@ -1,5 +1,7 @@
 package util;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import query.QueryRecord;
 
@@ -8,17 +10,7 @@ public class Global {
 	//these values are set after 
 	private static Vector<QueryRecord> positives = new Vector<QueryRecord>(); 
 	
-	private static Vector<String> relevantTerms = new Vector<String>();
-	
-	private static Vector<String> currentQueryForComp = new Vector<String>();
-
-	public static void setCurrentQueryForComp(String[] query) {
-		
-		currentQueryForComp.clear();
-		
-		for (String s : query)
-			currentQueryForComp.add(s.trim().toLowerCase());
-	}
+	private static List<String> relevantTerms = new ArrayList<String>();
 	
 	public static void setPositives(Vector<QueryRecord> results) {
 		
@@ -31,24 +23,29 @@ public class Global {
 			}
 	}
 	
-	public static void setRelevantTerms(Vector<String> terms) {
+	public static void setRelevantTerms(List<String> terms) {
 		
 		relevantTerms.clear();
 		
 		for (String term : terms)
 			relevantTerms.add(term);
+		
+		sanitizeList(relevantTerms);
 	}
 	
 	public static Vector<QueryRecord> getPositives() {
 		return positives;
 	}
 	
-	public static Vector<String> getRelevantTerms() {
+	public static List<String> getRelevantTerms() {
 		return relevantTerms;
 	}
 	
-	public static Vector<String> getCurrentQuery() {
-		return currentQueryForComp;
+	public static void sanitizeList(List<String> theList) {
+		for (int i = 0; i < theList.size(); i++) {
+			String s = theList.get(i);
+			theList.set(i, s.trim().toLowerCase());
+		}
 	}
-
+	
 }

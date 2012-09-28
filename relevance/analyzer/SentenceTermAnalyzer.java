@@ -8,8 +8,11 @@ import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.Vector;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,6 +24,9 @@ import opennlp.tools.sentdetect.*;
 import query.QueryRecord;
 import util.Global;
 import util.HtmlParser;
+import util.Logger;
+import util.MapValueComparator;
+import util.Logger.MsgType;
 
 
 /* Sentence scope term analyzer will only 
@@ -44,7 +50,7 @@ public class SentenceTermAnalyzer extends TermAnalyzer {
 	private String[] extractSentences(String text) {
 		SentenceModel model = null;
 		try {
-			InputStream modelIn = new FileInputStream("lib/en-sent.bin");
+			InputStream modelIn = new FileInputStream("/usr/local/lib/en-sent.bin");
 			model = new SentenceModel(modelIn);		
 		}
 		catch (IOException e) {
@@ -140,6 +146,23 @@ public class SentenceTermAnalyzer extends TermAnalyzer {
 		for (TermFreq tf : termFreqs) {
 			rates.put(tf.getTerm(), 1.0 * tf.getFreq() / totalFreq);
 		}	
+		
+		TreeMap<String, Double> tmap = new TreeMap<String, Double>(
+				new MapValueComparator(rates) );
+		tmap.putAll(rates);
+		
+		Logger myLogger = Logger.getInstance();		
+		
+		Iterator<Entry<String,Double>> itr = tmap.entrySet().iterator();
+		int count = 0;
+		myLogger.write("********List of top 10 words by sentence Terms Analyzer****", 
+				MsgType.LOG);
+		while (itr.hasNext() && count < 10)
+		{
+			myLogger.write("term: " + itr.next().getKey(), MsgType.LOG);
+			count++;
+		}
+
 		return rates;
 	}
 	

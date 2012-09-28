@@ -2,13 +2,19 @@ package analyzer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.Vector;
+import java.util.Map.Entry;
 
 import query.QueryRecord;
 import util.Global;
+import util.Logger;
+import util.MapValueComparator;
 import util.StopWord;
+import util.Logger.MsgType;
 
 // Meta term analyzer will assign score to word according to the description
 public class MetaTermAnalyzer extends TermAnalyzer {
@@ -53,6 +59,23 @@ public class MetaTermAnalyzer extends TermAnalyzer {
 			System.err.println(entry.getKey() + " - " + entry.getValue());
 		}
 		
+		TreeMap<String, Double> tmap = new TreeMap<String, Double>(
+				new MapValueComparator(overallRates) );
+
+		tmap.putAll(overallRates);
+		
+		Logger myLogger = Logger.getInstance();
+		
+		Iterator<Entry<String,Double>> itr = tmap.entrySet().iterator();
+		int count = 0;
+		myLogger.write("********List of top 10 words by Metadata Terms Analyzer****", 
+				MsgType.LOG);
+		while (itr.hasNext() && count < 10)
+		{
+			myLogger.write("term: " + itr.next().getKey(), MsgType.LOG);
+			count++;
+		}
+
 		return overallRates;
 	}
 	
