@@ -67,6 +67,7 @@ public class KeyWordFinder {
 			if (result.getUrl().matches(".*wikipedia\\.org.*")) {
 				String title = result.getTitle();
 				title = title.replace("- Wikipedia, the free encyclopedia", "");
+				title = title.replaceAll("[^\\w\\s]", "");
 				wikiTitle = Arrays.asList(title.split("\\s+"));
 			}
 				
