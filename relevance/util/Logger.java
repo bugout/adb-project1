@@ -15,8 +15,8 @@ public class Logger {
 	};
 	
 	protected Logger() throws IOException {
-		log = new FileWriter(new File("IR_Log.txt"));
-		errorLog = new FileWriter(new File("IR_ErrorLog.txt"));
+		log = new FileWriter(new File("transcript.txt"), true);
+		errorLog = new FileWriter(new File("IR_Debug_Log.txt"), true);
 	}
 	
 	public static Logger getInstance() {
