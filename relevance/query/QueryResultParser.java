@@ -23,9 +23,14 @@ public class QueryResultParser {
 			theDoc.getDocumentElement().normalize();
 			
 			NodeList nList = theDoc.getElementsByTagName("content");
-			System.out.println(nList.getLength());
 			
-			for (int i = 0 ; i <  10; i++)
+			//we need first 10 elements
+			int listSize = 10;
+			
+			if (nList.getLength() < listSize)
+				listSize = nList.getLength();
+			
+			for (int i = 0 ; i <  listSize; i++)
 			{
 				Element elmt = (Element) nList.item(i);
 				String title = getTagValue("d:Title", elmt);
@@ -52,8 +57,21 @@ public class QueryResultParser {
 	
 	private String getTagValue(String tagType, Element theElmt) {
 		
-		NodeList theNodeList = theElmt.getElementsByTagName(tagType).item(0).getChildNodes();
-		Node theValue = (Node) theNodeList.item(0);
-		return theValue.getNodeValue();		
+		String retval = "";
+		
+		NodeList theNodeList = theElmt.getElementsByTagName(tagType);
+		
+		if (theNodeList.getLength() == 0)
+			return retval;
+		
+		NodeList childrenList = theNodeList.item(0).getChildNodes();
+		
+		if (childrenList.getLength() > 0 )
+		{
+			Node theValue = (Node) childrenList.item(0);		
+			retval = theValue.getNodeValue();
+	
+		}
+		return retval;		
 	}
 }

@@ -68,22 +68,11 @@ public class QueryRecord {
 		return htmlText;
 	}
 	
-	public Vector<String> getHtmlPageWords() {
-		String[] wordList = htmlText.split("\\s+");
-		Vector<String> list = new Vector<String>();
-		int i = 0;
-		for (String word : wordList) { 				
-			word = word.replaceAll("[^a-zA-Z0-9]", "").toLowerCase(); // remove all non-alphanumeric chars
-			
-			if(StopWord.StopWordList().contains(word))
-				continue;
-			else {
-				list.add(word);
-				i++;
-			}
-		}
+	public String toString() {
 		
-		return list;
+		StringBuffer sb = new StringBuffer();	
+		sb.append("Title: " + title);
+		return sb.toString();
 	}
 
 }

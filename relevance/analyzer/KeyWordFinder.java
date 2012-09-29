@@ -42,6 +42,11 @@ public class KeyWordFinder {
 		
 		//add other analysis methods here
 		
+		//if we don't have a wiki page, then analyze other titles
+		
+		//if one of the top 5 words appear in 2 or more titles
+		//can't be confident about the ordre in this case
+		//analyzeOtherTitles();
 		//if the revised query is empty at the end of this function
 		// add the existing query to the revised query and the top relevant 
 		//word

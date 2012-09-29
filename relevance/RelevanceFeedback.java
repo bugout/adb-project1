@@ -57,6 +57,12 @@ public class RelevanceFeedback {
 			// Parse query result using XML Parser, extract fields
 			Vector<QueryRecord> parsedResult = queryParser.parseQueryResult(result); 
 			
+			if(Global.DEBUG)
+			{
+				for (QueryRecord r : parsedResult)
+					myLogger.write(r.toString(), MsgType.ERROR);
+			}
+			
 			if (rounds == 1 && parsedResult.size() < topK) {  // terminate if less than topk result
 				System.out.println("Initial query result less than topK. Expansion exit!");
 				myLogger.close();
