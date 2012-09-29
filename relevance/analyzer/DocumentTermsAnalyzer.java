@@ -58,13 +58,19 @@ public class DocumentTermsAnalyzer extends TermAnalyzer {
 		
 		//write the top 10 words to the cop
 		Iterator<Entry<String,Double>> itr = tmap.entrySet().iterator();
-		int count = 0;
-		myLogger.write("********List of top 10 words by Document Terms Analyzer****", 
-				MsgType.LOG);
-		while (itr.hasNext() && count < 10)
+		
+		if (Global.DEBUG)
 		{
-			myLogger.write("term: " + itr.next().getKey(), MsgType.LOG);
-			count++;
+			int count = 0;
+			StringBuilder sb = new StringBuilder();
+			sb.append("Top 10 words by Document Terms Analyzer: [ ");
+			while (itr.hasNext() && count < 10)
+			{
+				sb.append(itr.next().getKey() + " ");
+				count++;
+			}
+			sb.append("]");
+			myLogger.write(sb.toString(), MsgType.ERROR);
 		}
 		
 		return overallRates;

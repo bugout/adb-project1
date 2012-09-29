@@ -82,35 +82,15 @@ public class TermRateExpander extends Expander {
 			}
 		}
 			
-		myLogger.write("Relevant Terms: " + relevantTerms.toString(), MsgType.LOG);
+		if(Global.DEBUG)
+			myLogger.write("Relevant Terms by Term Rate Expander: " + 
+					relevantTerms.toString(), MsgType.ERROR);
+		
 		Global.setRelevantTerms(relevantTerms);
 		
 		KeyWordFinder finder = new KeyWordFinder();
 		String[] retval = finder.anlalyzeKeyWords(query);
 		
-		// Pick the term that has the highest sum ratings and is in 
-		//list of relevant words
-		
-		/*
-		
-		String expandTerm = null;
-		double maxScore = Double.MIN_VALUE;		
-		
-
-		List<String> currentQuery = Arrays.asList(query);
-		for (Map.Entry<String, Double> tr : termRates.entrySet()) {			
-			if (tr.getValue() > maxScore && !currentQuery.contains(tr.getKey())) {
-				maxScore = tr.getValue();
-				expandTerm = tr.getKey();
-			}
-		}
-	
-		System.out.println("Expanding terms :" + expandTerm);
-		
-		// Append the expanded term to the end of the previous query
-		List<String> newquery = new ArrayList(Arrays.asList(query));
-		newquery.add(expandTerm);
-		*/
 		return retval;		
 	}
 

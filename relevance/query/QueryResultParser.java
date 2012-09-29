@@ -10,10 +10,21 @@ import org.w3c.dom.*;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import util.Logger;
+import util.Logger.MsgType;
+
 //Loop first 10 web entries
 
 public class QueryResultParser {
+	
+	private Logger myLogger;
+	
 	//parses xml data that is contained in xmlContent	
+	
+	public QueryResultParser() {
+		myLogger = Logger.getInstance();
+	}
+	
 	public Vector<QueryRecord> parseQueryResult(String xmlContent) {
 		Vector<QueryRecord> theRecords = new Vector<QueryRecord>();
 		
@@ -42,14 +53,11 @@ public class QueryResultParser {
 			}
 			
 		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			myLogger.write("Error Parsing XML Data: " + e.toString(), MsgType.ERROR);
 		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			myLogger.write("Error Parsing XML Data: " + e.toString(), MsgType.ERROR);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			myLogger.write("Error Parsing XML Data: " + e.toString(), MsgType.ERROR);
 		}
 		
 		return theRecords;

@@ -1,12 +1,10 @@
 package query;
 
-import java.util.Vector;
-
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import util.StopWord;
+import util.Logger;
+import util.Logger.MsgType;
 
 public class QueryRecord {
 	
@@ -16,6 +14,7 @@ public class QueryRecord {
 	private String description;
 	private boolean relevant;
 	private String htmlText;
+	private Logger myLogger;
 	
 	public QueryRecord(String title, String url, String displayUrl, String description)
 	{
@@ -25,6 +24,7 @@ public class QueryRecord {
 		this.description = description;
 		relevant = false;
 		htmlText = "";
+		myLogger = Logger.getInstance();
 	}
 	
 	public String getTitle() {
@@ -59,7 +59,8 @@ public class QueryRecord {
 			htmlText = htmlDoc.text();
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			myLogger.write("Error downloading webpage in QueryRecord : " 
+					+ e.toString(), MsgType.ERROR);
 		}
 	
 	}

@@ -66,6 +66,7 @@ public class KeyWordFinder {
 	
 		List<String> wikiTitle = null;
 		
+		
 		for (QueryRecord result : Global.getPositives())
 			if (result.getUrl().matches(".*wikipedia\\.org.*")) {
 				String title = result.getTitle();
