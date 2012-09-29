@@ -2,15 +2,19 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Vector;
 
 import analyzer.Expander;
-import analyzer.KeyWordFinder;
 import analyzer.TermRateExpander;
 import query.*;
 import searcher.*;
 import util.Global;
+import util.Logger;
+import util.Logger.MsgType;
 
 public class RelevanceFeedback {
 	private static String apiKey;
@@ -20,6 +24,14 @@ public class RelevanceFeedback {
 	
 	// Usage: RelevanceFeedback <ApiKey> <topK> <precision> <'query'>
 	public static void main(String[] args) throws Exception {					
+		
+		Logger myLogger = Logger.getInstance();
+		
+		//get current date
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		 
+		myLogger.write("Started: " + dateFormat.format(new Date()), MsgType.LOG);
+		myLogger.write("Started: " + dateFormat.format(new Date()), MsgType.ERROR);
 		
 		readArguments(args);
 				
@@ -47,27 +59,77 @@ public class RelevanceFeedback {
 			
 			if (rounds == 1 && parsedResult.size() < topK) {  // terminate if less than topk result
 				System.out.println("Initial query result less than topK. Expansion exit!");
+				myLogger.close();
 				System.exit(1);
 			}
 			
 			// get feedbacks from the user
 			getFeedbacks(parsedResult);	
 			
-			//Setting these to set global positive so that they can be accessed
-			//from any analyzer
-			Global.setPositives(parsedResult);
-			
-			query = expander.expand(parsedResult, basicQuery);
-			
 			precision = computePrecision(parsedResult);
+			
+			printTranscript(rounds, parsedResult, precision, query);
+			
 			if (stopExpansion(precision))
 				break;
+			
+			//set positives to be accessed by different analyzers
+			Global.setPositives(parsedResult);
+			query = expander.expand(parsedResult, basicQuery);	
 		} 
 		
 		// Output
 		printSummary(rounds, precision, query);
+		
+		myLogger.close();
 	}
 	
+	private static void printTranscript(int rounds, Vector<QueryRecord> parsedResult, 
+													double precision, String[] query) 
+	{
+		
+		//get the Logger instance
+		
+		Logger myLogger = Logger.getInstance();
+		
+		myLogger.write("\n===========================================", MsgType.LOG);
+		myLogger.write("Round " + rounds, MsgType.LOG);
+		
+		StringBuffer queryText = new StringBuffer();
+		
+		for (int i = 0; i < query.length; i++)
+			queryText.append(query[i] + " ");
+		
+		myLogger.write("Query: " + queryText.toString() + "\n", MsgType.LOG);
+		
+		int count = 1;
+		for (QueryRecord result : parsedResult)
+		{
+			myLogger.write("Result " + count, MsgType.LOG);
+			
+			StringBuffer sb = new StringBuffer();
+			
+			sb.append("Relevant: ");
+			
+			if (result.isRelevant())
+				sb.append("YES\n[\n");
+			else
+				sb.append("NO\n[\n");
+			
+			sb.append("    URL: " + result.getUrl() + "\n");
+			sb.append("    Title: " + result.getTitle() + "\n");
+			sb.append("    Summary: " + result.getDescription() + "\n");
+			
+			sb.append("]\n");
+			
+			myLogger.write(sb.toString(), MsgType.LOG);
+			
+			count++;
+		}
+		
+		myLogger.write("Precision : " + precision + "\n", MsgType.LOG);
+		
+	}
 	
 	private static boolean stopExpansion(double precision) {
 		if (precision == 0) // if precision is zero, terminate at once
