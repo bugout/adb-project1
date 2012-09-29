@@ -54,10 +54,10 @@ public class MetaTermAnalyzer extends TermAnalyzer {
 			}
 		}
 		
-		System.err.println("Weight of word in metadata analyzer");
-		for (Map.Entry<String, Double> entry : overallRates.entrySet()) {
-			System.err.println(entry.getKey() + " - " + entry.getValue());
-		}
+//		System.err.println("Weight of word in metadata analyzer");
+//		for (Map.Entry<String, Double> entry : overallRates.entrySet()) {
+//			System.err.println(entry.getKey() + " - " + entry.getValue());
+//		}
 		
 		TreeMap<String, Double> tmap = new TreeMap<String, Double>(
 				new MapValueComparator(overallRates) );
@@ -123,22 +123,5 @@ public class MetaTermAnalyzer extends TermAnalyzer {
 		}
 		
 		return rates;	
-	}
-	
-	
-	public static void main(String[] args) {
-		Vector<QueryRecord> results = new Vector<QueryRecord>();
-		results.add(new QueryRecord("bill gates a the", "", "", "bill microsoft gates"));
-		results.add(new QueryRecord("bill gates a the", "", "", "microsoft microsoft"));
-		results.add(new QueryRecord("bill a the a", "", "", "microsoft microsoft"));
-		for (QueryRecord r : results)
-			r.setFeedback(true);
-		
-		
-		MetaTermAnalyzer a = new MetaTermAnalyzer(new String[]{"aaa"});
-		Map<String, Double> rates = a.rateTerms(results, new String[]{"aaa"});
-		for (Map.Entry<String, Double> entry : rates.entrySet()) {
-			System.out.println(entry.getKey() + " - " + entry.getValue());
-		}
-	}
+	}	
 }

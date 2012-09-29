@@ -75,7 +75,7 @@ public class RelevanceFeedback {
 			
 			//set positives to be accessed by different analyzers
 			Global.setPositives(parsedResult);
-			query = expander.expand(parsedResult, basicQuery);	
+			query = expander.expand(parsedResult, query);
 		} 
 		
 		// Output
@@ -237,6 +237,6 @@ public class RelevanceFeedback {
 	private static void printSummary(int rounds, double precision, String[] query) {
 		System.out.printf("Target precision reached in %d rounds\n", rounds);
 		System.out.printf("Precision: %.2f\n", precision);
-		System.out.printf("Querys: %s\n", Arrays.toString(query));
+		System.out.printf("Final Query: %s\n", Arrays.toString(query));
 	}
 }
