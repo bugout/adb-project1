@@ -31,11 +31,13 @@ public class KeyWordFinder {
 	
 	public String[] anlalyzeKeyWords(String[] query)  {
 		
-		sanitizedOriginalQuery = Arrays.asList(query);
 		originalQuery = Arrays.asList(query);
+		sanitizedOriginalQuery = Arrays.asList(query);
 		
-		Global.sanitizeList(originalQuery);
-		myLogger.write("Existing Query: " + originalQuery.toString(), MsgType.LOG);
+		Global.sanitizeList(sanitizedOriginalQuery);
+		if (Global.DEBUG)
+			myLogger.write("Sanitized Existing Query: " + 
+				sanitizedOriginalQuery.toString(), MsgType.ERROR);
 		
 		//if there is a wiki page for the given query
 		analyzeWikiTitle();	
@@ -54,7 +56,8 @@ public class KeyWordFinder {
 		{
 			revisedQuery.addAll(originalQuery);
 			revisedQuery.add(relevantTerms.get(0));
-			myLogger.write("Revised Query: " + revisedQuery.toString(), MsgType.LOG);
+			if(Global.DEBUG)
+				myLogger.write("Revised Query: " + revisedQuery.toString(), MsgType.LOG);
 		}
 		
 		String[] retval = revisedQuery.toArray(new String[0]);
@@ -66,24 +69,30 @@ public class KeyWordFinder {
 	
 		List<String> wikiTitle = null;
 		
-		
+		//if more than one wiki pages, append them. 
+		//though in most cases that shouldn't be the case
+		String title = "";
+
 		for (QueryRecord result : Global.getPositives())
 			if (result.getUrl().matches(".*wikipedia\\.org.*")) {
-				String title = result.getTitle();
-				title = title.replace("- Wikipedia, the free encyclopedia", "");
-				title = title.replaceAll("[^\\w\\s]", "");
-				wikiTitle = Arrays.asList(title.split("\\s+"));
+				String resultTitle = result.getTitle();
+				resultTitle = resultTitle.replace("- Wikipedia, the free encyclopedia", "");
+				resultTitle = resultTitle.replaceAll("[^\\w\\s]", "");//replace punctuations
+				title = title + resultTitle;
 			}
-				
+		
+		//if nothing was added to the title, just return
+		if (title == "")
+			return;
+		
+		wikiTitle = Arrays.asList(title.split("\\s+"));
 		Global.sanitizeList(wikiTitle);
-		myLogger.write("Wiki Title: " + wikiTitle.toString(), MsgType.LOG);
+		
+		if(Global.DEBUG)
+			myLogger.write("Wiki Title: " + wikiTitle.toString(), MsgType.ERROR);
 	
 		//if query term or terms are contained in the wikiTitle
 		if ( partOfWikiTitle(wikiTitle) ) {
-			
-			Global.sanitizeList(relevantTerms);
-			
-			myLogger.write("Relevant Terms: " + relevantTerms.toString(), MsgType.LOG);		
 			
 			List<String> candidates = new ArrayList<String>();
 			for (String s : relevantTerms)
