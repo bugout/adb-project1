@@ -16,6 +16,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.apache.lucene.util.Version;
 
+import util.Logger;
 import util.StopWord;
 
 
@@ -27,21 +28,10 @@ public class Indexer {
 	public Indexer() throws IOException{
 		
 		config = new IndexWriterConfig(Version.LUCENE_36, 
-				new StandardAnalyzer(Version.LUCENE_36, StopWord.StopWordList()));
-		
-		this.indexDir = new RAMDirectory();
-		
-		writer = new IndexWriter(indexDir, config);
-		
-	}
-	
-	public void buildCorpus(String doc) throws IOException {
-		writer.deleteAll();
-		Document d = new Document();
-		d.add(new Field("content", doc, Field.Store.YES, Field.Index.ANALYZED, Field.TermVector.YES));
-		writer.addDocument(d);
-		writer.close();
-	}
+				new StandardAnalyzer(Version.LUCENE_36, StopWord.StopWordList()));		
+		this.indexDir = new RAMDirectory();		
+		writer = new IndexWriter(indexDir, config);		
+	}	
 		
 	public void buildCorpus(Vector<String> docs) throws IOException {
 		writer.deleteAll();
@@ -53,7 +43,7 @@ public class Indexer {
 		writer.close();
 	}
 	
-	public void buildAsSingle(Vector<String> docs) throws IOException {
+	public void buildAggregate(Vector<String> docs) throws IOException {
 		writer.deleteAll();
 		StringBuilder sb = new StringBuilder();
 		for (String doc : docs) {
@@ -69,13 +59,17 @@ public class Indexer {
 	
 	// get term frequency
 	public Vector<TermFreq> getTermFreqs() {
+		Vector<TermFreq> termFreqs = new Vector<TermFreq>();
 		try {
-			IndexReader reader = IndexReader.open(indexDir);	
-			Vector<TermFreq> termFreqs = new Vector<TermFreq>();
+			IndexReader reader = IndexReader.open(indexDir);				
+			
 			assert(reader.numDocs() == 1);
-			// hard coding here...
+			
 			TermFreqVector termVector = reader.getTermFreqVector(0, "content");
-			assert(termVector != null);
+			if (termVector == null) {
+				Logger.getInstance().write("Fetching TermFreqVector failed.", Logger.MsgType.ERROR);
+				return termFreqs;
+			}
 			String[] terms = termVector.getTerms();
 			int[] freqs = termVector.getTermFrequencies();
 				
@@ -85,12 +79,13 @@ public class Indexer {
 			return termFreqs;
 		}
 		catch (Exception e){
+			Logger.getInstance().write("Reading index failed.", Logger.MsgType.ERROR);
 			e.printStackTrace();
-			return null;
+			return termFreqs;
 		}
 	}
 	
-	public Vector<Vector<TermFreq> > getTermFrequencies() {
+	public Vector<Vector<TermFreq> > getDocTermFreqs() {
 		
 		Vector<Vector<TermFreq> > retVal = new Vector<Vector<TermFreq> >();
 		
@@ -111,16 +106,16 @@ public class Indexer {
 				
 				retVal.add(tfVec);
 				
-				for (int count = 0; count < 11; count++)
-					System.out.printf("Term = %s, Freq = %s%n", 
-							tfVec.get(count).getTerm(), tfVec.get(count).getFreq());
+//				for (int count = 0; count < 11; count++)
+//					System.out.printf("Term = %s, Freq = %s%n", 
+//							tfVec.get(count).getTerm(), tfVec.get(count).getFreq());
 			}
 		}
 		catch (CorruptIndexException e) {
-			// TODO Auto-generated catch block
+			Logger.getInstance().write("Reading index failed.", Logger.MsgType.ERROR);
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			Logger.getInstance().write("Reading index failed.", Logger.MsgType.ERROR);
 			e.printStackTrace();
 		}
 		

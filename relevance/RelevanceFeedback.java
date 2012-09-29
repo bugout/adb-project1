@@ -22,13 +22,11 @@ public class RelevanceFeedback {
 	public static void main(String[] args) throws Exception {					
 		
 		readArguments(args);
-		
-		
+				
 		// searcher
 		SearchProvider seacher = new BingSearchProvider(apiKey, topK);		
 		// analyzer
-		Expander analyzer = new TermRateExpander(basicQuery);		
-		
+		Expander expander = new TermRateExpander(basicQuery);				
 		// query parser
 		QueryResultParser queryParser = new QueryResultParser();
 
@@ -47,6 +45,11 @@ public class RelevanceFeedback {
 			// Parse query result using XML Parser, extract fields
 			Vector<QueryRecord> parsedResult = queryParser.parseQueryResult(result); 
 			
+			if (rounds == 1 && parsedResult.size() < topK) {  // terminate if less than topk result
+				System.out.println("Initial query result less than topK. Expansion exit!");
+				System.exit(1);
+			}
+			
 			// get feedbacks from the user
 			getFeedbacks(parsedResult);	
 			
@@ -54,7 +57,7 @@ public class RelevanceFeedback {
 			//from any analyzer
 			Global.setPositives(parsedResult);
 			
-			query = analyzer.expand(parsedResult, basicQuery);
+			query = expander.expand(parsedResult, basicQuery);
 			
 			precision = computePrecision(parsedResult);
 			if (stopExpansion(precision))
@@ -119,19 +122,22 @@ public class RelevanceFeedback {
 		}
 	}
 	
+	/**
+	 * Read apikey, topk, precision, query from command line arguments 
+	 */
 	private static void readArguments(String[] args) {
-	
+		// check argument length
 		if (args.length < 4) {
 			System.err.println("Usage: RelevanceFeedback <ApiKey> <topK> <precision> <'query'>");
 			System.exit(1);
 		}
 
-			// get command line arguments
+		// get command line arguments
 		apiKey = args[0];
 		try {
 			topK = Integer.parseInt(args[1]);
 			targetPrecision = Double.parseDouble(args[2]);
-			if (targetPrecision < 0 || targetPrecision > 1) {
+			if (targetPrecision < 0 || targetPrecision > 1) { // check precision scope
 				System.err.println("Please input a valid precision (0 <= precision <= 1)");
 				System.exit(1);
 			}

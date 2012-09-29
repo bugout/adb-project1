@@ -122,7 +122,7 @@ public class SentenceTermAnalyzer extends TermAnalyzer {
 		Indexer indexer = null;
 		try {
 			indexer = new Indexer();			
-			indexer.buildAsSingle(docs);
+			indexer.buildAggregate(docs);
 		}
 		catch (IOException e){
 			e.printStackTrace();

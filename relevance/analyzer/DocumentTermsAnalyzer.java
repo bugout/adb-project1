@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.Vector;
 
@@ -44,9 +43,9 @@ public class DocumentTermsAnalyzer extends TermAnalyzer {
 		try {
 			indexer = new Indexer();
 			indexer.buildCorpus(docs);
-			tf = indexer.getTermFrequencies();
+			tf = indexer.getDocTermFreqs();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			Logger.getInstance().write("Building index fails.", Logger.MsgType.ERROR);
 			e.printStackTrace();
 		}
 		
@@ -83,9 +82,7 @@ public class DocumentTermsAnalyzer extends TermAnalyzer {
 			int totalTerms = 0;
 			for (TermFreq theTerm : theDocument)
 				totalTerms = totalTerms + theTerm.getFreq();
-			
-			System.out.println(totalTerms);
-			
+						
 			for (TermFreq theTerm : theDocument)
 				theMap.put(theTerm.getTerm(), (1.0 * theTerm.getFreq() / totalTerms));	
 			

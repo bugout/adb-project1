@@ -23,6 +23,7 @@ import query.QueryRecord;
 
 public class WikiTermAnalyzer extends TermAnalyzer {
 	private Indexer indexer;
+	private static boolean external = false;
 	
 	public WikiTermAnalyzer(String[] query) {
 		super(query);
@@ -64,7 +65,6 @@ public class WikiTermAnalyzer extends TermAnalyzer {
 		return rates;
 	}
 	
-	// Parse the html either by Tika or JSoup
 	private Map<String, Double> analyzeWikiPages(Vector<QueryRecord> wikiPages, String[] query) {
 		// Building a document repository
 		// rate words using tf-rdf
@@ -75,45 +75,35 @@ public class WikiTermAnalyzer extends TermAnalyzer {
 		Vector<String> documents = new Vector<String>();		
 		for (QueryRecord wikiPage : wikiPages) {
 			Document htmlDoc = null;
-			try {
-				// Download & Parse the webpage
-				htmlDoc = Jsoup.connect(wikiPage.getUrl()).get();			
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
-			String text = htmlDoc.text();
+			String text = wikiPage.getHtmlPage();	
 			documents.add(text);		
 			
-			// Extract and follow the External links
-			Vector<String> links = extractExternalLinks(htmlDoc);
-			// Download all pages
-			
-			// TODO: Filter out non-html pages
-			for (String link : links) {
-				System.err.printf("Downloading page %s\n", link);
-				text = parser.getText(link);
-				documents.add(text);
-			}					
+			if (external) {
+				Logger.getInstance().write("Trying to follow trustful external links from the wiki page ", Logger.MsgType.LOG);
+				// Extract and follow the External links
+				Vector<String> links = extractExternalLinks(htmlDoc);
+				// Download all pages			
+				for (String link : links) {					
+					Logger.getInstance().write(String.format("Downloading page %s\n", link), Logger.MsgType.LOG);
+					text = parser.getText(link);
+					documents.add(text);
+				}				
+			}
 		}		
-		
-		System.err.println("Building index...");
-		buildCorpus(documents);
-		
-		System.err.println("Reading index...");
-		Map<String, Double> rates = analyzeTerms();
-		return rates;
-	}
-	
-	private void buildCorpus(Vector<String> docs) {
+				
 		try {
 			indexer = new Indexer();			
-			indexer.buildAsSingle(docs);
+			indexer.buildAggregate(documents);
 		}
 		catch (IOException e){
 			e.printStackTrace();
-		}		
+			Logger.getInstance().write("Building index fails.", Logger.MsgType.ERROR);
+		}	
+		
+		Map<String, Double> rates = analyzeTerms();
+		return rates;
 	}
+
 	
 	private Map<String, Double> analyzeTerms()  {
 		Vector<TermFreq> termFreqs = indexer.getTermFreqs();
@@ -127,7 +117,7 @@ public class WikiTermAnalyzer extends TermAnalyzer {
 		Collections.reverse(termFreqs);
 		
 		//get the top 50 words
-		for (int i = 0; i < 50; i++)
+		for (int i = 0; i < 10; i++)
 			System.err.println(termFreqs.get(i).getTerm() + " - " + termFreqs.get(i).getFreq());
 		
 		Map<String, Double> rates = new HashMap<String, Double>();
@@ -138,7 +128,6 @@ public class WikiTermAnalyzer extends TermAnalyzer {
 		return rates;
 	}
 	
-	// for now we keep it this way
 	private static Vector<String> extractExternalLinks(Document htmlDoc) {
 		Vector<String> links = new Vector<String>();
 		Elements elinks = htmlDoc.select("h2 ~ ul li a[rel=nofollow][class=external text]");
@@ -148,14 +137,5 @@ public class WikiTermAnalyzer extends TermAnalyzer {
 		}
 		
 		return links;
-	}
-	
-	public static void main(String[] args) throws Exception {
-		String url = "http://en.wikipedia.org/wiki/Bill_Gates";
-		System.out.println(url.matches(".*wikipedia\\.org.*"));
-		Vector<QueryRecord> positives = new Vector<QueryRecord>(1);
-		positives.add(new QueryRecord("bill",url,url,"ddddd"));
-		WikiTermAnalyzer a = new WikiTermAnalyzer(new String[0]);
-		a.analyzeWikiPages(positives, new String[0]);
-	}
+	}	
 }
