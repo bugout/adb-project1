@@ -14,8 +14,6 @@ import java.util.Map.Entry;
 import util.*;
 import util.Logger.MsgType;
 
-import org.apache.lucene.index.CorruptIndexException;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.*;
 import org.jsoup.select.Elements;
 

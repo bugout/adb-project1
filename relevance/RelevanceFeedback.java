@@ -57,7 +57,7 @@ public class RelevanceFeedback {
 			//from any analyzer
 			Global.setPositives(parsedResult);
 			
-			query = expander.expand(parsedResult, basicQuery);
+			query = expander.expand(parsedResult, query);
 			
 			precision = computePrecision(parsedResult);
 			if (stopExpansion(precision))
