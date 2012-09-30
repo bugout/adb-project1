@@ -10,32 +10,58 @@ import util.Global;
 import util.Logger;
 import util.Logger.MsgType;
 
+
+/*
+ * This class checks if the part of query is part of one of the relevant documents
+ * display URL.  If it is, it checks the titles of such relevant pages for relevant terms
+ * Only 5 relevant terms are considered.
+ * Test Case - Columbia to fetch results for columbia university
+ */
 public class DisplayURLExpander extends Expander {
 
 	@Override
 	public void expand(String[] query, List<String> revisedQuery) {
 		
+		//set the originalQuery and sanitizedOriginalQuery
 		setQueries(query);
 		
+		//get a local copy of Global.relevantTerms and logger instance
 		List<String> relevantTerms = Global.getRelevantTerms();
 		Logger myLogger = Logger.getInstance();
 		
 		boolean isFound = false;
 		String titleText = "";
-			
+		
+		//candidates contains list of relevantTerms that appear in the title
+		//of the webpage (webpage associated with this algorithm)
 		List<String> candidates = new ArrayList<String>();
+		
+		//contains aggregated titleList of all webpages that are of interest
 		List<String> titleList = new ArrayList<String>();
 			
 		Iterator<QueryRecord> iter = Global.getPositives().iterator();
-			
+		
+		//Search for webpages whose domain is contained in the query.
 		while(iter.hasNext())
 		{	
 			QueryRecord result = iter.next();
-			String displayUrl = result.displayUrl();		
-			displayUrl = displayUrl.replaceAll("[^\\w]", "");//replace punctuations
-			displayUrl = displayUrl.replaceAll("[.*\\.]", "");
-			displayUrl = displayUrl.replaceAll("[\\..*]", "");
+			String displayUrl = result.displayUrl();	
+		
+			//find first index of . and second index of ., extract subString 
+			//them.  It should work for most webpages.
+			displayUrl = displayUrl.substring(displayUrl.indexOf('.') + 1);
+	
+			//search for the next period
+			displayUrl = displayUrl.substring(0, displayUrl.indexOf('.'));
+			
+			if(Global.DEBUG)
+				myLogger.write("Display URL: " + displayUrl, MsgType.DEBUG);
+			
+			displayUrl = displayUrl.toLowerCase().trim();
 			displayUrl = displayUrl.trim().toLowerCase();
+			
+			if(Global.DEBUG)
+				myLogger.write("Display URL: " + displayUrl, MsgType.DEBUG);
 				
 			//check if display url contains any of the query words
 			for (String s : sanitizedOriginalQuery)
@@ -63,6 +89,9 @@ public class DisplayURLExpander extends Expander {
 				
 			Iterator<String> itr = relevantTerms.iterator();
 			int count = 0;
+			
+			//check top 5 relevant terms, and if they are part of the titleList,
+			//add them to candidates
 			while (itr.hasNext() && count < 5)
 			{
 				String s = itr.next();
@@ -71,10 +100,10 @@ public class DisplayURLExpander extends Expander {
 			}
 		}
 			
-		//add the top two elements to the revised list
-			
+		//add the top two elements to the candidates list
 		if(candidates.size() > 0)
 		{
+			//order of those terms in respect to each other
 			if (candidates.size() > 1)
 				analyzeOrder(candidates, titleList);
 			
@@ -98,5 +127,4 @@ public class DisplayURLExpander extends Expander {
 			candidates.set(1, temp);
 		}
 	}
-
 }

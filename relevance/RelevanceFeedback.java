@@ -123,7 +123,7 @@ public class RelevanceFeedback {
 			else
 				sb.append("NO\n[\n");
 			
-			sb.append("    URL: " + result.getUrl() + "\n");
+			sb.append("    URL: " + result.displayUrl() + "\n");
 			sb.append("    Title: " + result.getTitle() + "\n");
 			sb.append("    Summary: " + result.getDescription() + "\n");
 			
@@ -166,7 +166,7 @@ public class RelevanceFeedback {
 			System.out.printf("Result %d\n", i + 1);
 			System.out.println("-----------------------------");
 			System.out.printf("Title: %s\n", parsedResults.get(i).getTitle());
-			System.out.printf("Url: %s\n", parsedResults.get(i).getUrl());
+			System.out.printf("Display Url: %s\n", parsedResults.get(i).displayUrl());
 			System.out.printf("Description: %s\n", parsedResults.get(i).getDescription());
 			while (true) {
 				System.out.print("Relevance(Y/N)? :");

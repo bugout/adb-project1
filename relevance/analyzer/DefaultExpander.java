@@ -7,8 +7,8 @@ import util.Global;
 import util.Logger;
 import util.Logger.MsgType;
 
-/*Default expander adds the top most relveant word in the revisedQuery
- * 
+/*
+ * Default expander adds the top most relevant word in the revisedQuery
  */
 
 public class DefaultExpander extends Expander {

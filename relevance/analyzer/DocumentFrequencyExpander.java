@@ -19,6 +19,7 @@ public class DocumentFrequencyExpander extends Expander {
 	//if it does, we can say with high confidence that is a relevant word
 	//if there are two such words, we need to consider both of them as they may
 	//form a phrase
+	
 	@Override
 	public void expand(String[] query, List<String> revisedQuery) {
 
@@ -28,7 +29,7 @@ public class DocumentFrequencyExpander extends Expander {
 		List<String> relevantTerms = Global.getRelevantTerms();
 		
 		List<TermFreq> myTopWordsList = new ArrayList<TermFreq>();
-		List<String> candidates = new ArrayList<String>();;
+		List<String> candidates = new ArrayList<String>();
 		
 		//ignore wiki pages
 		for (String s : relevantTerms) {	
@@ -57,9 +58,9 @@ public class DocumentFrequencyExpander extends Expander {
 		int count = 0;
 		while(itr.hasNext() && count < 2) {
 			TermFreq termFreq = itr.next();
-			if(termFreq.getFreq() > 2)
+			if(termFreq.getFreq() > 3) 
 				candidates.add( termFreq.getTerm() );
-			count++;	
+			count++;
 		}
 			
 		if(candidates.size() > 0)
@@ -83,7 +84,7 @@ public class DocumentFrequencyExpander extends Expander {
 	{
 		int swap = 0;
 		Iterator<QueryRecord> iter = Global.getPositives().iterator();
-		while(iter.hasNext() && swap == 0)
+		while(iter.hasNext())
 		{	
 			QueryRecord result = iter.next();
 			
