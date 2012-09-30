@@ -206,6 +206,7 @@ public class KeyWordFinder {
 			TermFreq termFreq = itr.next();
 			if(termFreq.getFreq() > 3)
 				candidates.add( termFreq.getTerm() );
+			count++;
 			
 		}
 		
@@ -225,9 +226,9 @@ public class KeyWordFinder {
 	
 	private void analyzeOrder(List<String> candidates)
 	{
-		boolean swap = true;
+		int swap = 0;
 		Iterator<QueryRecord> iter = Global.getPositives().iterator();
-		while(iter.hasNext() && swap)
+		while(iter.hasNext() && swap == 0)
 		{	
 			QueryRecord result = iter.next();
 			
@@ -240,15 +241,15 @@ public class KeyWordFinder {
 			if ( contentList.contains(candidates.get(0)) && 
 					contentList.contains(candidates.get(1)))
 			{
-				if ( contentList.indexOf(candidates.get(0)) < 
+				if ( contentList.indexOf(candidates.get(0)) > 
 						contentList.indexOf(candidates.get(1)) )
-					swap = false;
-				else
-					swap = true;
+					swap++;
 			}
 		}
 		
-		if (swap)
+		//if there are at least 3 documents where both the words co-exist 
+		//and one always exist after the other
+		if (swap > 2)
 		{
 			String temp = candidates.get(0);
 			candidates.set(0, candidates.get(1));
