@@ -258,7 +258,7 @@ public class KeyWordFinder {
 	}
 	
 	private void analyzeDisplayURL() {
-		
+	
 		boolean isFound = false;
 		String titleText = "";
 		
@@ -267,7 +267,7 @@ public class KeyWordFinder {
 		
 		Iterator<QueryRecord> iter = Global.getPositives().iterator();
 		
-		while(iter.hasNext() && !isFound)
+		while(iter.hasNext())
 		{	
 			QueryRecord result = iter.next();
 			String displayUrl = result.displayUrl();		
@@ -281,11 +281,12 @@ public class KeyWordFinder {
 				if ( displayUrl.contains(s) )
 				{
 					isFound = true;
-					titleText = result.getTitle();
+					titleText = titleText + result.getTitle();
 				}
 		}
 		
-		
+		Logger.getInstance().write(titleText, MsgType.ERROR);
+				
 		if (isFound)
 		{
 			//check which top two terms appear in the title and in which order
