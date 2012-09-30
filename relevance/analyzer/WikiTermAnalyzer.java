@@ -61,7 +61,7 @@ public class WikiTermAnalyzer extends TermAnalyzer {
 				count++;
 			}
 			sb.append("]");
-			myLogger.write(sb.toString(), MsgType.ERROR);
+			myLogger.write(sb.toString(), MsgType.DEBUG);
 		}
 		return rates;
 	}
@@ -98,7 +98,7 @@ public class WikiTermAnalyzer extends TermAnalyzer {
 		}
 		catch (IOException e){
 			e.printStackTrace();
-			Logger.getInstance().write("Building index fails.", Logger.MsgType.ERROR);
+			Logger.getInstance().write("Building index fails.", Logger.MsgType.DEBUG);
 		}	
 		
 		Map<String, Double> rates = analyzeTerms();

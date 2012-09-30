@@ -12,7 +12,7 @@ public class Global {
 	
 	private static List<String> relevantTerms = new ArrayList<String>();
 	
-	public final static boolean DEBUG = true;
+	public static boolean DEBUG = true;
 	
 	public static void setPositives(Vector<QueryRecord> results) {
 		

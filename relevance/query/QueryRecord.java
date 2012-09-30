@@ -60,7 +60,7 @@ public class QueryRecord {
 		}
 		catch (Exception e) {
 			myLogger.write("Error downloading webpage in QueryRecord : " 
-					+ e.toString(), MsgType.ERROR);
+					+ e.toString(), MsgType.DEBUG);
 		}
 	
 	}

@@ -53,11 +53,11 @@ public class QueryResultParser {
 			}
 			
 		} catch (ParserConfigurationException e) {
-			myLogger.write("Error Parsing XML Data: " + e.toString(), MsgType.ERROR);
+			myLogger.write("Error Parsing XML Data: " + e.toString(), MsgType.DEBUG);
 		} catch (SAXException e) {
-			myLogger.write("Error Parsing XML Data: " + e.toString(), MsgType.ERROR);
+			myLogger.write("Error Parsing XML Data: " + e.toString(), MsgType.DEBUG);
 		} catch (IOException e) {
-			myLogger.write("Error Parsing XML Data: " + e.toString(), MsgType.ERROR);
+			myLogger.write("Error Parsing XML Data: " + e.toString(), MsgType.DEBUG);
 		}
 		
 		return theRecords;

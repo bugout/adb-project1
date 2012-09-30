@@ -146,7 +146,7 @@ public class SentenceTermAnalyzer extends TermAnalyzer {
 				count++;
 			}
 			sb.append("]");
-			myLogger.write(sb.toString(), MsgType.ERROR);
+			myLogger.write(sb.toString(), MsgType.DEBUG);
 		}
 
 		return rates;

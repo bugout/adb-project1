@@ -11,12 +11,12 @@ public class Logger {
 	private FileWriter errorLog = null;
 	
 	public enum MsgType {
-		LOG, ERROR
+		LOG, DEBUG
 	};
 	
 	protected Logger() throws IOException {
-		log = new FileWriter(new File("transcript.txt"), true);
-		errorLog = new FileWriter(new File("IR_Debug_Log.txt"), true);
+		log = new FileWriter(new File("transcript.txt"), false);
+		errorLog = new FileWriter(new File("IR_Debug_Log.txt"), false);
 	}
 	
 	public static Logger getInstance() {
@@ -39,7 +39,7 @@ public class Logger {
 				log.write(msg + '\n');
 				log.flush();
 			}
-			else if (MsgType.ERROR == type) {
+			else if (MsgType.DEBUG == type) {
 				errorLog.write(msg + '\n');
 				errorLog.flush();
 			}

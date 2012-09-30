@@ -31,14 +31,14 @@ public class RelevanceFeedback {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		 
 		myLogger.write("Started: " + dateFormat.format(new Date()), MsgType.LOG);
-		myLogger.write("Started: " + dateFormat.format(new Date()), MsgType.ERROR);
+		myLogger.write("Started: " + dateFormat.format(new Date()), MsgType.DEBUG);
 		
 		readArguments(args);
 				
 		// searcher
 		SearchProvider seacher = new BingSearchProvider(apiKey, topK);		
 		// analyzer
-		Expander expander = new TermRateExpander(basicQuery);				
+		TermRateExpander expander = new TermRateExpander(basicQuery);				
 		// query parser
 		QueryResultParser queryParser = new QueryResultParser();
 
@@ -60,7 +60,7 @@ public class RelevanceFeedback {
 			if(Global.DEBUG)
 			{
 				for (QueryRecord r : parsedResult)
-					myLogger.write(r.toString(), MsgType.ERROR);
+					myLogger.write(r.toString(), MsgType.DEBUG);
 			}
 			
 			if (rounds == 1 && parsedResult.size() < topK) {  // terminate if less than topk result
@@ -86,7 +86,8 @@ public class RelevanceFeedback {
 		
 		// Output
 		printSummary(rounds, precision, query);
-		
+		myLogger.write("Ended: " + dateFormat.format(new Date()), MsgType.LOG);
+		myLogger.write("Ended: " + dateFormat.format(new Date()), MsgType.DEBUG);
 		myLogger.close();
 	}
 	

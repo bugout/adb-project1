@@ -19,12 +19,21 @@ import util.Logger.MsgType;
 /* Term rate expander expand the query
  * by adding the term with highest rating score
  */
-public class TermRateExpander extends Expander {
+public class TermRateExpander {
+	
+	//This is the vector to store all the analyzers
 	private Vector<TermAnalyzer> analyzers = new Vector<TermAnalyzer>();
+	
+	//This is the vector to store all the expanders
+	private Vector<Expander> expanders = new Vector<Expander>();
+	
+	private String[] basicQuery;
+	
+	public TermRateExpander(String[] query) {		
 		
-	public TermRateExpander(String[] query) {
-		super(query);			
+		basicQuery = query;
 		registerAnalyzers();
+		registerExpanders();
 	}
 	
 	private void registerAnalyzers() {
@@ -34,13 +43,33 @@ public class TermRateExpander extends Expander {
 		registerAnalyzer(new SentenceTermAnalyzer(basicQuery));
 	}
 	
+	private void registerExpanders() {
+		registerExpander( new WikiTitleExpander() );
+		registerExpander( new DocumentFrequencyExpander() );
+		registerExpander( new DisplayURLExpander() );
+		registerExpander( new DefaultExpander() );
+	}
+	
+	private void registerExpander(Expander expander) {
+		if ( !expanders.contains(expander) )
+			expanders.add(expander);
+	}
+	
+	
 	private void registerAnalyzer(TermAnalyzer analyzer) {
 		if (!analyzers.contains(analyzer))
 			analyzers.add(analyzer);
 	}
 
-	@Override
 	public String[] expand(Vector<QueryRecord> results, String[] query) {
+		
+		populateRelevantTerms(results, query);
+		String[] revisedQuery = populateRevisedQuery(query);
+		return revisedQuery;
+	}
+	
+	private void populateRelevantTerms(Vector<QueryRecord> results, String[] query) {
+		
 		// sum up the scores of each term in all analyzers
 		Map<String, Double> termRates = new HashMap<String, Double>();				
 		for (TermAnalyzer analyzer : analyzers) {	
@@ -82,16 +111,24 @@ public class TermRateExpander extends Expander {
 			}
 		}
 			
-		if(Global.DEBUG)
-			myLogger.write("Relevant Terms by Term Rate Expander: " + 
-					relevantTerms.toString(), MsgType.ERROR);
+		myLogger.write("Relevant Terms by Term Rate Expander: " + 
+					relevantTerms.toString(), MsgType.DEBUG);
 		
 		Global.setRelevantTerms(relevantTerms);
-		
-		KeyWordFinder finder = new KeyWordFinder();
-		String[] retval = finder.anlalyzeKeyWords(query);
-		
-		return retval;		
 	}
-
+	
+	private String[] populateRevisedQuery(String[] query) {
+		
+		List<String> revisedQuery = new ArrayList<String>();
+		for (Expander expander : expanders)
+		{
+			if ( revisedQuery.isEmpty() )
+				expander.expand(query, revisedQuery);
+			else
+				break;
+		}
+		
+		return revisedQuery.toArray(new String[0]);
+	}
+	
 }

@@ -79,7 +79,7 @@ public class MetaTermAnalyzer extends TermAnalyzer {
 				count++;
 			}
 			sb.append("]");
-			myLogger.write(sb.toString(), MsgType.ERROR);
+			myLogger.write(sb.toString(), MsgType.DEBUG);
 		}
 
 		return overallRates;

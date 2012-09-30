@@ -67,7 +67,7 @@ public class Indexer {
 			
 			TermFreqVector termVector = reader.getTermFreqVector(0, "content");
 			if (termVector == null) {
-				Logger.getInstance().write("Fetching TermFreqVector failed.", Logger.MsgType.ERROR);
+				Logger.getInstance().write("Fetching TermFreqVector failed.", Logger.MsgType.DEBUG);
 				return termFreqs;
 			}
 			String[] terms = termVector.getTerms();
@@ -79,7 +79,7 @@ public class Indexer {
 			return termFreqs;
 		}
 		catch (Exception e){
-			Logger.getInstance().write("Reading index failed.", Logger.MsgType.ERROR);
+			Logger.getInstance().write("Reading index failed.", Logger.MsgType.DEBUG);
 			e.printStackTrace();
 			return termFreqs;
 		}
@@ -97,7 +97,7 @@ public class Indexer {
 				
 				if (tfv == null)
 				{
-					Logger.getInstance().write("Fetching TermFreqVector Failed.", Logger.MsgType.ERROR);
+					Logger.getInstance().write("Fetching TermFreqVector Failed.", Logger.MsgType.DEBUG);
 					break;
 				}
 				
@@ -116,12 +116,12 @@ public class Indexer {
 			}
 		}
 		catch (CorruptIndexException e) {
-			Logger.getInstance().write("Reading index failed. Error Message: " 
-					+ e.toString(), Logger.MsgType.ERROR);
+			Logger.getInstance().write("Reading index failed. DEBUG Message: " 
+					+ e.toString(), Logger.MsgType.DEBUG);
 			e.printStackTrace();
 		} catch (IOException e) {
-			Logger.getInstance().write("Reading index failed. Error Message: " +
-						e.toString() , Logger.MsgType.ERROR);
+			Logger.getInstance().write("Reading index failed. DEBUG Message: " +
+						e.toString() , Logger.MsgType.DEBUG);
 			e.printStackTrace();
 		}
 		

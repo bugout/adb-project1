@@ -45,7 +45,7 @@ public class DocumentTermsAnalyzer extends TermAnalyzer {
 			indexer.buildCorpus(docs);
 			tf = indexer.getDocTermFreqs();
 		} catch (IOException e) {
-			Logger.getInstance().write("Building index fails.", Logger.MsgType.ERROR);
+			Logger.getInstance().write("Building index fails.", Logger.MsgType.DEBUG);
 			e.printStackTrace();
 		}
 		
@@ -70,7 +70,7 @@ public class DocumentTermsAnalyzer extends TermAnalyzer {
 				count++;
 			}
 			sb.append("]");
-			myLogger.write(sb.toString(), MsgType.ERROR);
+			myLogger.write(sb.toString(), MsgType.DEBUG);
 		}
 		
 		return overallRates;
