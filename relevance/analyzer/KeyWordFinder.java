@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Vector;
 
 import query.QueryRecord;
 import util.Global;
@@ -49,8 +48,12 @@ public class KeyWordFinder {
 		
 		//if one of the top 5 words appear in 2 or more titles
 		//can't be confident about the order in this case
+		
 		if( revisedQuery.isEmpty() )
 			analyzeOtherTitles();
+		
+		if( revisedQuery.isEmpty() )
+			analyzeDisplayURL();
 		
 		//if the revised query is empty at the end of this function
 		// add the existing query to the revised query and the top relevant 
@@ -165,36 +168,167 @@ public class KeyWordFinder {
 		return retval;
 	}
 
+	
+	//determine if any of the top 10 words appear in more than 4 documents
+	//if it does, we can say with high confidence that is a relevant word
+	//if there are two such words, we need to consider both of them as they may
+	//form a phrase
 	private void analyzeOtherTitles() {
-/*		
-		Vector<List<String>> titles = new Vector<List<String>>();
 		
+		List<TermFreq> myTopWordsList = new ArrayList<TermFreq>();
+		List<String> candidates = new ArrayList<String>();;
 		//ignore wiki pages
-		for (QueryRecord result : Global.getPositives())
-			if (!result.getUrl().matches(".*wikipedia\\.org.*")) {
-				String title = result.getTitle();
-				title = title.replaceAll("[^\\w\\s]", "");//replace punctuations
-				List<String> titleList = Arrays.asList(title.split("\\s+"));
-				titles.add(titleList);
-			}
-		
-		for (List<String> theList : titles)
-			Global.sanitizeList(theList);
-		
-		//check in how many titles
-		int occurance = 0;
-		for (List<String> theList : titles)
-			if ( partOfTitle(theList) )
-				occurance++;
-		
-		//if query words are part of more than 2 title, check if any candidates
-		//are in the title
-		
-		if (occurance > 2)
+		for (String s : relevantTerms) {	
+			int occurrence = 0;
+			for (QueryRecord result : Global.getPositives())
+			{	
+				String content = result.getTitle() + result.getDescription();		
+				content = content.replaceAll("[^\\w\\s]", "");//replace punctuations
+				List<String> contentList = Arrays.asList(content.split("\\s+"));
+	
+				Global.sanitizeList(contentList);
+				
+				if(contentList.contains(s))
+					occurrence++;
+			}	
 			
-		//check if the query exist in keyword
-		//if it does, check if 
-*/
+			myTopWordsList.add(new TermFreq(s, occurrence));
+		}
+		
+		Collections.sort(myTopWordsList);
+		Collections.reverse(myTopWordsList);
+	
+		myLogger.write(myTopWordsList.toString(), MsgType.ERROR);
+		
+		Iterator<TermFreq> itr = myTopWordsList.iterator();
+		int count = 0;
+		while(itr.hasNext() && count < 2) {
+			TermFreq termFreq = itr.next();
+			if(termFreq.getFreq() > 3)
+				candidates.add( termFreq.getTerm() );
+			
+		}
+		
+		if(candidates.size() > 0)
+		{
+			if (candidates.size() == 2)
+				analyzeOrder(candidates);
+			revisedQuery.addAll(originalQuery);
+			revisedQuery.addAll(candidates);
+		}
 	}
+	
+	//The order of candidates can be somewhat determined 
+	//if we compare the position of candidate strings with respect to each other
+	//and if there is a pattern found if one appears before the other always
+	//otherwise the order of two words added will not matter
+	
+	private void analyzeOrder(List<String> candidates)
+	{
+		boolean swap = true;
+		Iterator<QueryRecord> iter = Global.getPositives().iterator();
+		while(iter.hasNext() && swap)
+		{	
+			QueryRecord result = iter.next();
+			
+			String content = result.getTitle() + result.getDescription();		
+			content = content.replaceAll("[^\\w\\s]", "");//replace punctuations
+			List<String> contentList = Arrays.asList(content.split("\\s+"));
 
+			Global.sanitizeList(contentList);
+			
+			if ( contentList.contains(candidates.get(0)) && 
+					contentList.contains(candidates.get(1)))
+			{
+				if ( contentList.indexOf(candidates.get(0)) < 
+						contentList.indexOf(candidates.get(1)) )
+					swap = false;
+				else
+					swap = true;
+			}
+		}
+		
+		if (swap)
+		{
+			String temp = candidates.get(0);
+			candidates.set(0, candidates.get(1));
+			candidates.set(1, temp);
+		}
+	}
+	
+	private void analyzeDisplayURL() {
+		
+		boolean isFound = false;
+		String titleText = "";
+		
+		List<String> candidates = new ArrayList<String>();
+		List<String> titleList = new ArrayList<String>();
+		
+		Iterator<QueryRecord> iter = Global.getPositives().iterator();
+		
+		while(iter.hasNext() && !isFound)
+		{	
+			QueryRecord result = iter.next();
+			String displayUrl = result.displayUrl();		
+			displayUrl = displayUrl.replaceAll("[^\\w]", "");//replace punctuations
+			displayUrl = displayUrl.replaceAll("[.*\\.]", "");
+			displayUrl = displayUrl.replaceAll("[\\..*]", "");
+			displayUrl = displayUrl.trim().toLowerCase();
+			
+			//check if display url contains any of the query words
+			for (String s : sanitizedOriginalQuery)
+				if ( displayUrl.contains(s) )
+				{
+					isFound = true;
+					titleText = result.getTitle();
+				}
+		}
+		
+		
+		if (isFound)
+		{
+			//check which top two terms appear in the title and in which order
+			titleText = titleText.trim().toLowerCase();
+			String[] titleArray = titleText.split("[\\s+]");
+			titleList = Arrays.asList(titleArray);
+			
+			Global.sanitizeList(titleList);
+			
+			//check top 5 elements
+			
+			Iterator<String> itr = relevantTerms.iterator();
+			int count = 0;
+			while (itr.hasNext() && count < 5)
+			{
+				String s = itr.next();
+				if(titleList.contains(s))
+					candidates.add(s);
+			}
+			
+		}
+		
+		//add the top two elements to the revised list
+		
+		if(candidates.size() > 0)
+		{
+			if (candidates.size() > 1)
+				analyzeOrder(candidates, titleList);
+			revisedQuery.addAll(originalQuery);
+			//add first two element
+			revisedQuery.add(candidates.get(0));
+			revisedQuery.add(candidates.get(1));
+		}
+		
+	}
+	
+	private void analyzeOrder(List<String> candidates, List<String> titleList) {
+		
+		if ( titleList.indexOf(candidates.get(0)) > titleList.indexOf(candidates.get(1)) )
+		{
+			String temp = candidates.get(0);
+			candidates.set(0, candidates.get(1));
+			candidates.set(1, temp);
+		}
+	}
+	
 }
