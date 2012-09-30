@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 
 import query.QueryRecord;
 import util.Global;
@@ -47,8 +48,10 @@ public class KeyWordFinder {
 		//if we don't have a wiki page, then analyze other titles
 		
 		//if one of the top 5 words appear in 2 or more titles
-		//can't be confident about the ordre in this case
-		//analyzeOtherTitles();
+		//can't be confident about the order in this case
+		if( revisedQuery.isEmpty() )
+			analyzeOtherTitles();
+		
 		//if the revised query is empty at the end of this function
 		// add the existing query to the revised query and the top relevant 
 		//word
@@ -92,7 +95,7 @@ public class KeyWordFinder {
 			myLogger.write("Wiki Title: " + wikiTitle.toString(), MsgType.ERROR);
 	
 		//if query term or terms are contained in the wikiTitle
-		if ( partOfWikiTitle(wikiTitle) ) {
+		if ( partOfTitle(wikiTitle) ) {
 			
 			List<String> candidates = new ArrayList<String>();
 			for (String s : relevantTerms)
@@ -144,22 +147,54 @@ public class KeyWordFinder {
 		Collections.sort(newQuery);
 		
 		//construct the revisedQuery
-		revisedQuery.addAll(subOriginalQuery);
 		for (TermFreq element : newQuery)
 			revisedQuery.add(element.getTerm());
+		revisedQuery.addAll(subOriginalQuery);
 	}
 	
 	//returns true if query or part of query is part of Wiki Title
-	private boolean partOfWikiTitle(List<String> wikiTitle) {
+	private boolean partOfTitle(List<String> title) {
 		boolean retval = false;
 		
 		for (String s : sanitizedOriginalQuery) {
-			if (wikiTitle.contains(s)) {
+			if (title.contains(s)) {
 				retval = true;
 				break;
 			}
 		}
 		return retval;
 	}
-	
+
+	private void analyzeOtherTitles() {
+/*		
+		Vector<List<String>> titles = new Vector<List<String>>();
+		
+		//ignore wiki pages
+		for (QueryRecord result : Global.getPositives())
+			if (!result.getUrl().matches(".*wikipedia\\.org.*")) {
+				String title = result.getTitle();
+				title = title.replaceAll("[^\\w\\s]", "");//replace punctuations
+				List<String> titleList = Arrays.asList(title.split("\\s+"));
+				titles.add(titleList);
+			}
+		
+		for (List<String> theList : titles)
+			Global.sanitizeList(theList);
+		
+		//check in how many titles
+		int occurance = 0;
+		for (List<String> theList : titles)
+			if ( partOfTitle(theList) )
+				occurance++;
+		
+		//if query words are part of more than 2 title, check if any candidates
+		//are in the title
+		
+		if (occurance > 2)
+			
+		//check if the query exist in keyword
+		//if it does, check if 
+*/
+	}
+
 }
