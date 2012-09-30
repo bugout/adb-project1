@@ -94,6 +94,13 @@ public class Indexer {
 			for (int i = 0; i < reader.numDocs(); i++) {
 				TermFreqVector tfv = null;
 				tfv = reader.getTermFreqVector(i, "content");
+				
+				if (tfv == null)
+				{
+					Logger.getInstance().write("Fetching TermFreqVector Failed.", Logger.MsgType.ERROR);
+					break;
+				}
+				
 				String[] terms = tfv.getTerms();
 				int[] freq = tfv.getTermFrequencies();
 				Vector<TermFreq> tfVec = new Vector<TermFreq>();
@@ -106,16 +113,15 @@ public class Indexer {
 				
 				retVal.add(tfVec);
 				
-//				for (int count = 0; count < 11; count++)
-//					System.out.printf("Term = %s, Freq = %s%n", 
-//							tfVec.get(count).getTerm(), tfVec.get(count).getFreq());
 			}
 		}
 		catch (CorruptIndexException e) {
-			Logger.getInstance().write("Reading index failed.", Logger.MsgType.ERROR);
+			Logger.getInstance().write("Reading index failed. Error Message: " 
+					+ e.toString(), Logger.MsgType.ERROR);
 			e.printStackTrace();
 		} catch (IOException e) {
-			Logger.getInstance().write("Reading index failed.", Logger.MsgType.ERROR);
+			Logger.getInstance().write("Reading index failed. Error Message: " +
+						e.toString() , Logger.MsgType.ERROR);
 			e.printStackTrace();
 		}
 		
