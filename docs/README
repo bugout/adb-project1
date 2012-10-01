@@ -48,12 +48,96 @@ Group members:
    expansion phase.
    
    4.1 Finding relevant terms
-      We collect the relevant terms from various sources. 
+      We collect the relevant terms from various sources. In each
+      source, we assign a weight to each term, namely the tern
+      weight. We select top 50 (empirically value) from each source
+      and sum up the term weights from all sources for each term. We
+      set those terms that have the highest top 10 sum weight to be
+      the relevant terms.
 
-      * Term frequecy 
-      * Meta info
-      * Wikipedia pages
-      * Sentence-scope cooccurence
+      More specifically, weight for term t is,
+      	   w(t) = w_1(t) + w_2(t) + w_3(t) + ...
+      where w_i(t) is the weight of t in source i. We will discuss the
+      computation of w_i(i) later.
+
+      - Term weighting
+      Here we introduce how we determine the term weight. No matter we
+      are analyzing the meta data only or are analyzing the web pages,
+      we can treat the texts as documents. For all the relevant
+      documents, we calculate the aggregated term frequency of term. In
+      another word, we simply concatenate all documents to a single
+      document, and count the term frequency in that document.
+
+      This way, we are ignoring the document frequency of a
+      term. However, the idf in classic tf-idf method is used as a
+      smoothing factor in a large collections. In our project, we are
+      exposed to 10 search results which are far from enough to obtain
+      the statistics about a term. So ignoring idf does little harm to
+      the result.
+
+      In addition, we use a stop word lists that removes common
+      English words as well as common words in a web document. It proves that using
+      stop word list is suffice to achieve what document frequency is
+      supposed to do.
+      
+      - Sources of relevant terms
+      Before we introduce each of our sources of finding relevant
+      terms, we want to talk about normalization. Because we are using
+      a mixed weight to rank each term, we have to first normalize the
+      weight in each source, so that we have a meaningful metric for
+      the weights summed up. For term frequency metric, the
+      normalization is simply done by divide the frequency by the
+      total number of tokens in entire document collection.
+
+      	* Meta info
+	The first source of relevant terms comes from the meta
+	information, that is the title, url and description returned 
+	by the Bing API. Because the user returns their feedbacks based on
+      	these meta information, it is very likely it include the
+      	relevant terms we need.
+	
+	We pre-assign a different weight for each field, for example,
+	0.7 for title, 0.3 for description and 0 for url. For
+	each term, we count the term frequency in each field
+	separately and then compute the weighted sum over all fields. 
+
+        * Term frequency
+	In this part, instead of gather term frequency from meta
+	information, we look at the web pages of the relevant
+	documents. Term weight is assigned as its normalized term frequency.
+      
+	* Wikipedia pages
+	Wikipedia page is a perfect reference to discriminate
+	ambiguous terms. Terms are divided into different categories
+	by Wikipedia. Moreover, considering the authority and high-quality of a
+	wiki page, we should assign higher weight for the terms in a
+	relevant wiki page.
+	
+	More interestingly, not only can we count the term frequency
+	in the wiki page, we can also follow the external links in the wiki
+	page to get more relevant documents. The aggregated term
+	frequency in all these pages are likely to be a better weight
+	for a term.
+
+	However, we temporarily turn off the external-link expansion
+	because of the page downloading increase the response
+	time which may not be a good user experience. But we believe
+	this is a feasible and promising method.
+
+      	* Sentence-scope co-occurrence
+	We also try to consider term proximity in weighting. A term
+	appears close to the query keywords is more likely to be
+	expanded than those loosely co-occurred terms. This is
+	particularly true in phrases where several words tend to
+	appear together all the time.
+	
+	We define two words to be close if they appear in the same
+	sentence. Sentence-scope co-occurrence will help us identify
+	relevant terms in phrases.
+
+	Specifically, we combine all the sentences in relevant pages
+	that contain at least one query keyword into a single
+	document. We determine term weight based on this single document.
       
 
    4.2 Query expansion (Anuj)
@@ -65,8 +149,12 @@ Group members:
        * Display URL 
        * Default
 
-5. Discussions
-   * Stop words
-   * Why we are not considering idf?
+5. Discussions and future improvements
    * Negative pages
+   We ignore all the negative feedbacks in our project. Negative pages
+   do not contain much information for finding expanding terms. A
+   possible usage of negative pages is as a verification tool after we
+   find a candidate expansion. We verify in those negative pages
+   whether the expanded terms appear less commonly.
 
+   * 
