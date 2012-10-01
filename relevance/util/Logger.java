@@ -15,7 +15,7 @@ public class Logger {
 	};
 	
 	protected Logger() throws IOException {
-		log = new FileWriter(new File("transcript.txt"), false);
+		log = new FileWriter(new File("Transcript_Log.txt"), false);
 		errorLog = new FileWriter(new File("IR_Debug_Log.txt"), false);
 	}
 	
