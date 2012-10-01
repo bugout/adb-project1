@@ -1,0 +1,72 @@
+------------------------------------------
+Readme files for CS6111 Project 1
+Group members:
+      Anuj Arora (your UNI)
+      Jiacheng Yang (jy2522)
+------------------------------------------
+
+1. List of files
+   * projects
+     - relevance/RelevanceFeedback.java: the startup & ui module
+     - relevance/seacher/*: modules for querying Bing API
+     - relevance/query/*: modules for parsing Bing's query results
+     - relevance/analyzer/*: modules for query expansion
+     - relevance/indexer/*: modules for index building
+     - relevance/util/*: utility modules
+     - relevance/lib/*: third-party libraries for common tasks such as
+     html parsing, term frequency counting and sentence detection
+   * documents
+     - docs/README: a readme file to decribe our methods
+     - docs/transcript: the transcript of 3 test cases on the course
+     website.
+
+
+2. How to run?
+   * Compile on clic machines
+     1) Go into directory relevance/
+     2) Compile with command:
+     	javac -cp ".:lib/*" RelevanceFeedback.java      
+
+   * Run tests
+     1) Go into directory relevance/
+     2) run command:
+     	java -cp ".:lib/*" RelevanceFeedback <ApiKey> <topK>
+     	<precision> <'query keywords'>
+        
+	Example: java -cp ".:lib/*" RelevanceFeedback your-bing-api 10
+	0.8 'bill gates'
+
+     3) Interact with the UI for feedbacks and results
+     4) You can also check the result in Transcript_Log.txt
+
+3. System design   
+
+4. Query modification method
+   Our query modification follows two phases. The first phase is to find
+   relevant terms from the positive pages marked by the user. After
+   that, we select the terms to expand from those relevant terms in the
+   expansion phase.
+   
+   4.1 Finding relevant terms
+      We collect the relevant terms from various sources. 
+
+      * Term frequecy 
+      * Meta info
+      * Wikipedia pages
+      * Sentence-scope cooccurence
+      
+
+   4.2 Query expansion (Anuj)
+       We have four strategies for query expansion in different
+       situations. ....... add more.....
+
+       * Wiki title
+       * Document frequency
+       * Display URL 
+       * Default
+
+5. Discussions
+   * Stop words
+   * Why we are not considering idf?
+   * Negative pages
+
