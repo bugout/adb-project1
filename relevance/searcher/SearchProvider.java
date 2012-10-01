@@ -1,8 +1,8 @@
 package searcher;
 
 public abstract class SearchProvider {
-	protected static String apiKey;
-	protected static int topK;
+	protected String apiKey;
+	protected int topK;
 	
 	
 	public SearchProvider(String apikey, int topK) {

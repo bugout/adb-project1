@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Vector;
 
-import analyzer.Expander;
 import analyzer.TermRateExpander;
 import query.*;
 import searcher.*;
@@ -52,7 +51,15 @@ public class RelevanceFeedback {
 			System.out.println("Searching with keywords: " + Arrays.toString(query));
 			
 			// get search result from a search provider
-			String result = seacher.search(query);
+			String result = null;
+			try {
+				result = seacher.search(query);
+			}
+			catch (IOException e) {
+				myLogger.write("Querying Bing API fails.", MsgType.DEBUG);
+				System.err.println("Querying Bing API fails, please check your network.");
+				System.exit(1);			
+			}
 			
 			// Parse query result using XML Parser, extract fields
 			Vector<QueryRecord> parsedResult = queryParser.parseQueryResult(result); 

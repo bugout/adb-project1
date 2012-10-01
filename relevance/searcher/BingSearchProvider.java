@@ -12,6 +12,7 @@ public class BingSearchProvider extends SearchProvider {
 	
 	public BingSearchProvider(String apikey, int topk) { super(apikey, topk); }
 	
+	@SuppressWarnings("deprecation")
 	private String constructQueryUrl(String[] query) {
 		String queryUrl = bingUrl;
 		queryUrl = queryUrl + URLEncoder.encode("'");
@@ -32,7 +33,6 @@ public class BingSearchProvider extends SearchProvider {
 		String accountKeyEnc = new String(accountKeyBytes);
 
 		URL url = new URL(constructQueryUrl(query));		
-		// System.out.println(url);		
 		URLConnection urlConnection = url.openConnection();
 		urlConnection.setRequestProperty("Authorization", "Basic " + accountKeyEnc);
 					
@@ -40,7 +40,6 @@ public class BingSearchProvider extends SearchProvider {
 		byte[] contentRaw = new byte[urlConnection.getContentLength()];
 		inputStream.read(contentRaw);
 		String result = new String(contentRaw);				
-		// System.out.println(result);
 		
 		return result;
 	}

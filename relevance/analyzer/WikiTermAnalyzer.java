@@ -118,8 +118,8 @@ public class WikiTermAnalyzer extends TermAnalyzer {
 		Collections.reverse(termFreqs);
 		
 		//get the top 50 words
-		for (int i = 0; i < 10; i++)
-			System.err.println(termFreqs.get(i).getTerm() + " - " + termFreqs.get(i).getFreq());
+//		for (int i = 0; i < 10; i++)
+//			System.err.println(termFreqs.get(i).getTerm() + " - " + termFreqs.get(i).getFreq());
 		
 		Map<String, Double> rates = new HashMap<String, Double>();
 		for (TermFreq tf : termFreqs) {

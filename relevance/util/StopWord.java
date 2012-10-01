@@ -1,7 +1,6 @@
 package util;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashSet;
@@ -30,12 +29,5 @@ public class StopWord {
 			return null;
 		}
 		return stopWords;
-	}
-	
-	public static void main(String[] args) {
-		Set<String> words = StopWord.StopWordList();
-		for (String word : words) {
-			System.out.println(word);
-		}
 	}
 }
