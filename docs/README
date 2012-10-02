@@ -40,6 +40,9 @@ Group members:
      4) You can also check the result in Transcript_Log.txt
 
 3. System design   
+   Our system is structured as follows.
+
+   
 
 4. Query modification method
    Our query modification follows two phases. The first phase is to find
