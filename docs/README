@@ -40,9 +40,46 @@ Group members:
      4) You can also check the result in Transcript_Log.txt
 
 3. System design   
-   Our system is structured as follows.
+   Our system is decoupled into several modules. The main class
+   RelevanceFeedback in the default package is mainly for user
+   interface and interacting with other modules. The main class read
+   user's query from commandline and issue the query to a
+   SearchProvider, in this case, the Bing API. It then presents the
+   query result to user to get feedbacks. If we haven't reach the
+   desired precision, RelevanceFeedback calls an Expander to expand
+   the query and search with the revised query. An expander chooses
+   words to expand based on the results of several analyzers. An
+   analyzer assign a weight to each term according to different
+   statistics of a term, e.g. its frequency in titles/descriptions. An
+   analyzer may depend on some utitly classes to gather the statistics.
 
-   
+   An overall system architecture is shown in the following figure.
+
+     SearchProvider
+          |      (default, wiki, url) (meta, wiki, sentence, term freq)
+   RelevanceFeedback - Expander - TermAnalyzers
+          |                          |
+     User feedbacks             Indexer, Html parser...      
+
+   Here, we have two important abstraction. The
+   TermAnalyzer class is an abstract class that is used to assign
+   weights to terms. While the Expander class is an abstract class
+   that take the relevant terms (high weight terms) from term
+   analyzers and decide which words to expand and what is the right order of
+   the keywords.
+
+   We can easily plug in or replace term analysis and query expansion
+   methods by inheriting the abstract class. We can even mix various
+   methods together by taking advantage of their common interfaces.
+
+   In the Searcher package, we also have a abstract class for
+   SearchProvider, in case that we may want to use other search
+   engines other than Bing to finish the task.
+
+   Some utitlies class about query result parsing, inverted index
+   building can be found in query and indexer package. We also use
+   some third-party libraries to do the mundane jobs (all the
+   libraries we use are listed in the appendix of this doc).
 
 4. Query modification method
    Our query modification follows two phases. The first phase is to find
@@ -160,4 +197,16 @@ Group members:
    find a candidate expansion. We verify in those negative pages
    whether the expanded terms appear less commonly.
 
-   * 
+
+6. Appendix
+* Third-party libraries
+   We use several third-party libraries to do some trivial
+   works. We believe we should focus more on the techniques to expand
+   queries accurately, instead of building everything from scratch. We
+   have confirmed with Prof. Gravano about every library we used here.
+
+   List of third-party libraries and our usage:
+   jsoup - html parsing
+   lucene - term frequency counting
+   opennlp - sentence detection
+   common-codecs - for Bing result parsing  
