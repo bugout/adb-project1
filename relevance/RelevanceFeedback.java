@@ -223,27 +223,9 @@ public class RelevanceFeedback {
 		}
 		Vector<String> q = new Vector<String>();
 		for (int i = 2; i < args.length; i++) {
-			if (i == 2) {
-				if (!args[i].startsWith("'")) {
-					System.err.println("Please input a valid query, the query should be enclosed with \"'\"");
-					System.exit(1);
-				}
-			
-				q.add(args[i].replaceAll("'", ""));
-				//q.add(args[i].substring(1, args[i].length()));
-			}
-			else if ( i == args.length - 1 ) {
-				if (!args[i].endsWith("'")) {
-					System.err.println("Please input a valid query, the query should be enclosed with \"'\"");
-					System.exit(1);
-				}
-				q.add(args[i].replaceAll("'", ""));
-			//q.add(args[i].substring(0, args[i].length()-1));
-			}
-			else
-				q.add(args[i]);
-			}
-			basicQuery = q.toArray(new String[0]);
+			q.add(args[i]);
+		}
+		basicQuery = q.toArray(new String[0]);
 	}
 	
 	// Print summary after we meet the precision requirement
