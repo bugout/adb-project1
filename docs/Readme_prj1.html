@@ -1,0 +1,296 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+<html><head>
+<title>Untitled</title>
+<meta http-equiv="Content-type" content="text/html; charset=iso-8859-1">
+</head>
+<body bgcolor="#FFFFFF">
+
+<p>
+------------------------------------------<br>
+
+Readme files for CS6111 Project 1<br>
+
+Group members:<br>
+
+      Anuj Arora (your UNI)<br>
+
+      Jiacheng Yang (jy2522)<br>
+
+------------------------------------------<br>
+<br>
+
+
+<b>1. List of files<br></b>
+</p>
+   * projects<br>
+
+     - relevance/RelevanceFeedback.java: the startup & ui module<br>
+
+     - relevance/seacher/*: modules for querying Bing API<br>
+
+     - relevance/query/*: modules for parsing Bing's query results<br>
+
+     - relevance/analyzer/*: modules for query expansion<br>
+
+     - relevance/indexer/*: modules for index building<br>
+
+     - relevance/util/*: utility modules<br>
+
+     - relevance/lib/*: third-party libraries for common tasks such as
+     html parsing, term frequency counting and sentence detection
+   * documents<br>
+
+     - docs/README: a readme file to decribe our methods<br>
+
+     - docs/transcript: the transcript of 3 test cases on the course
+     website.<br>
+
+<p>
+</p>
+
+<b>2. How to run?</b>
+<p>
+
+   * Compile on clic machines
+     1) Go into directory relevance/
+     2) Compile with command:
+     	javac -cp ".:lib/*" RelevanceFeedback.java      
+
+   * Run tests
+     1) Go into directory relevance/
+     2) run command:
+     	java -cp ".:lib/*" RelevanceFeedback <ApiKey> <topK>
+     	<precision> <'query keywords'>
+        
+	Example: java -cp ".:lib/*" RelevanceFeedback your-bing-api 10
+	0.8 'bill gates'
+
+     3) Interact with the UI for feedbacks and results
+     4) You can also check the result in Transcript_Log.txt
+
+</p>
+
+
+
+<b>4. Query modification method</b>
+<p>
+   Our query modification follows two phases. The first phase is to find
+   relevant terms from the positive pages marked by the user. After
+   that, we select the terms to expand from those relevant terms in the
+   expansion phase.
+ </p> 
+<b>   4.1 Finding relevant terms</b>
+<p>
+
+Goal of this phase is to find top 10 relevant terms from the positive pages marked by the user. <br><br>
+
+
+      We collect the relevant terms from various sources. In each
+      source, we assign a weight to each term, namely the tern
+      weight. We select top 50 (empirically value) from each source
+      and sum up the term weights from all sources for each term. We
+      set those terms that have the highest top 10 sum weight to be
+      the relevant terms.<br>
+<br>
+
+
+      More specifically, weight for term t is,
+      	   w(t) = w_1(t) + w_2(t) + w_3(t) + ...
+      where w_i(t) is the weight of t in source i. We will discuss the
+      computation of w_i(i) later.<br>
+<br>
+
+
+      - Term weighting<br>
+
+      Here we introduce how we determine the term weight. No matter we
+      are analyzing the meta data only or are analyzing the web pages,
+      we can treat the texts as documents. For all the relevant
+      documents, we calculate the aggregated term frequency of term. In
+      another word, we simply concatenate all documents to a single
+      document, and count the term frequency in that document.<br>
+<br>
+
+
+      This way, we are ignoring the document frequency of a
+      term. However, the idf in classic tf-idf method is used as a
+      smoothing factor in a large collections. In our project, we are
+      exposed to 10 search results which are far from enough to obtain
+      the statistics about a term. So ignoring idf does little harm to
+      the result.<br>
+<br>
+
+
+      In addition, we use a stop word lists that removes common
+      English words as well as common words in a web document. It proves that using
+      stop word list is suffice to achieve what document frequency is
+      supposed to do.<br>
+<br>
+
+      
+      - Sources of relevant terms<br>
+
+      Before we introduce each of our sources of finding relevant
+      terms, we want to talk about normalization. Because we are using
+      a mixed weight to rank each term, we have to first normalize the
+      weight in each source, so that we have a meaningful metric for
+      the weights summed up. For term frequency metric, the
+      normalization is simply done by divide the frequency by the
+      total number of tokens in entire document collection.<br>
+<br>
+
+
+      	* Meta info<br>
+
+	The first source of relevant terms comes from the meta
+	information, that is the title, url and description returned 
+	by the Bing API. Because the user returns their feedbacks based on
+      	these meta information, it is very likely it include the
+      	relevant terms we need.<br>
+
+	
+	We pre-assign a different weight for each field, for example,
+	0.7 for title, 0.3 for description and 0 for url. For
+	each term, we count the term frequency in each field
+	separately and then compute the weighted sum over all fields. <br>
+<br>
+
+
+        * Term frequency<br>
+
+	In this part, instead of gather term frequency from meta
+	information, we look at the web pages of the relevant
+	documents. Term weight is assigned as its normalized term frequency.<br><br>
+
+
+      
+	* Wikipedia pages<br>
+
+	Wikipedia page is a perfect reference to discriminate
+	ambiguous terms. Terms are divided into different categories
+	by Wikipedia. Moreover, considering the authority and high-quality of a
+	wiki page, we should assign higher weight for the terms in a
+	relevant wiki page.<br>
+
+	
+	More interestingly, not only can we count the term frequency
+	in the wiki page, we can also follow the external links in the wiki
+	page to get more relevant documents. The aggregated term
+	frequency in all these pages are likely to be a better weight
+	for a term.<br>
+
+
+	However, we temporarily turn off the external-link expansion
+	because of the page downloading increase the response
+	time which may not be a good user experience. But we believe
+	this is a feasible and promising method.<br>
+<br>
+
+
+      	* Sentence-scope co-occurrence<br>
+
+	We also try to consider term proximity in weighting. A term
+	appears close to the query keywords is more likely to be
+	expanded than those loosely co-occurred terms. This is
+	particularly true in phrases where several words tend to
+	appear together all the time.<br>
+
+	
+	We define two words to be close if they appear in the same
+	sentence. Sentence-scope co-occurrence will help us identify
+	relevant terms in phrases.<br>
+
+
+	Specifically, we combine all the sentences in relevant pages
+	that contain at least one query keyword into a single
+	document. We determine term weight based on this single document.<br>
+
+</p>
+
+<b>4.2 Query expansion</b><br>
+
+<p>
+With the help of various analyzers we determine top 10 key terms.<br><br>
+  
+This top 10 terms are then analyzed for following - most useful keyword,  whether one or two keywords should be added and the order of the revised query.  We have 4 key expansion algorithms that work independent of each other and are run sequentially.  They are run in the order listed below.  Any If a prior expansion algorithm has yielded no results.  The 4 expansion algorithm are as follows - 
+
+<li> * WikiTitleExpander</li>
+<li> * DocumentFrequencyExpander</li>
+<li> * DisplayURLExpander</li>
+<li> * DefaultExpander</li>
+</p>
+<p>
+The expansion algorithm are run in the order listed above.  Each algorithm is only run if a prior algorithm has not populated the revised query.   If WikiTitleExpander populates the revised algorithm, the remaining algorithms are not run.  Similarly, if top 3 algorithms fail to populate the revised query, DefaultExpander will always populate the revised query.  The 4 algorithm are explained in detail here -  
+
+<li>
+<i><b>WikiTitleExpander</b></i> - We found that Wikipedia pages are an excellent source to resolve ambiguous queries.  If there is a relevant wikipedia page identified by the user,  we further analyze that page.   We compare the query to the title of the page.  If one or more terms of the given query are part of the title, we parse the rest of the title of the page and compare it to the top 10 identified relevant terms.  If one or two, top 10 terms appear in the title of such a wikipedia page, we pick those words to be part of the revised query.  <br><br>
+
+Next, we compare all the terms in the revised query with the order they appear in the title of the Wikipedia page, and rearrange the revised query terms in the order they appear in the wikipedia title.<br><br>
+
+When searching for bill gates with 'gates' as initial query, bill is one of our top 10 identified terms suitable for query expansion.  There also exist a 'Bill Gates' Wikipedia page that the user should have marked relevant as it appears in the top 10 Bing search results for 'gates'.  Using this algorithm, we will pick 'bill' as the keyword that should be added to the revised query.  We will also, rearrange the query to - 'Bill Gates', as that is how it appears in the title of the wikipedia page.   <br><br>
+
+We noted a large number of ambiguous queries can be resolved using this algorithm.<br><br>
+
+More examples - 1) Query: 'Bush' or 'George Bush'.  Upon marking 'George W Bush' as the relevant wikipedia page, the revised query becomes George W Bush.  This is a really interesting case, because it resolves ambiguity between George W. Bush and George H W Bush. <br>
+2) Searching for Newark, New Jersey.  Query: Newark.  Upon marking 'Newark, New Jersey' as the relevant wikipedia page, the revised query becomes Newark, New Jersey.  
+
+</li>
+<br>
+<li>
+<b><i>DocumentFrequencyExpander</i></b> - If there is not Wikipedia page that has appeared so far in the query results,  the WikiTitleExpander does not populate the revised query.  In that case, we analyze the top 10 terms against the title and description of all the relevant documents marked by the user.  If there exist one of two keywords (from the top 10 relevant terms list), that appear in the title + description of more than 3 documents, we pick those terms.  We sort the terms by the number of documents these terms appear in.  If there is a tie, we pick the higher weighed terms as identified by our analyzers in earlier steps. <br>
+<br>
+If we have picked 2 terms, we try to indentify the order of these terms.  By picking 2 terms, we know that these 2 terms must appear in at least 4 documents.  We, then check if these 2 terms appear in at least 3 same documents and if one always appear before the other.  If true, we rearrage these relevant terms in that order and append it to the query.   
+</li>
+<br>
+<li>
+<b><i>DisplayURLExpander</i></b> - If WikiTitleExpander and DocumentFrequencyExpander fail to populate the revised query, we check to see if the user entered query has a relevant document whose domain name.  We try to be strict here with our analysis.  We ensure that the page actually has a domain name, rather than just appearing in the URL.  If the page does have a domain name, we check if any of the top 10 terms appear in the title of this page.  If we have a hit here, we add those two terms to the revised query.  <br>
+<br>
+We, then, compare the order of terms in the revised query with the order in which the terms appear in the title, and we rearrange the revised query in that order.<br>
+<br>
+Example - Looking for columbia sportswear items.  Query: columbia.  The query gets revised to - 'columbia shop shirts'
+
+Corner case - If user was looking for Columbia University, depending on pages that bing returns, the revised query changes.  Earlier last week, bing was only returning the columbia.edu page in the top 10 results, and our query was getting revised to colmbia, new york.  But as of couple of days ago, we also started getting engineering school page in top 10 results.  This changed our revised query to 'Columbia Engineering new'.  Since we are only allowed to add two terms, we have to ignore the 3rd term, which would have been 'york'.  
+</li>
+<br>
+<li>
+<b><i>DefaultExpander</i></b> - If we all above algorithms fail to populate the revised query, the default algorithm appends the top most word in our list of top 10 identified terms to the query.
+</li>
+<br>
+</p>
+
+<b>5. Discussions and future improvements</b>
+<p>
+   * Negative pages<br>
+
+   We ignore all the negative feedbacks in our project. Negative pages
+   do not contain much information for finding expanding terms. A
+   possible usage of negative pages is as a verification tool after we
+   find a candidate expansion. We verify in those negative pages
+   whether the expanded terms appear less commonly.  
+</p>
+
+<b>6. Appendix</b>
+<p>
+* Third-party libraries<br>
+
+   We use several third-party libraries to do some trivial
+   works. We believe we should focus more on the techniques to expand
+   queries accurately, instead of building everything from scratch. We
+   have confirmed with Prof. Gravano about every library we used here.<br>
+<br>
+
+
+   List of third-party libraries and our usage:<br>
+
+   jsoup - html parsing<br>
+
+   lucene - term frequency counting<br>
+
+   opennlp - sentence detection<br>
+
+   common-codecs - for Bing result parsing  <br>
+
+</p>
+</body>
+</html>
