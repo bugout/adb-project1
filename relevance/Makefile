@@ -13,3 +13,6 @@ run: RelevanceFeedback.class
 
 # Or you can directly run the java command
 #java -cp ".:lib/*" RelevanceFeedback <api-key> <precision> <'query keywords'>
+
+clean:
+	rm *.class analyzer/*.class query/*.class util/*.class searcher/*.class indexer/*.class

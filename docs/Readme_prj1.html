@@ -38,95 +38,49 @@ Group members:<br>
      - relevance/util/*: utility modules<br>
 
      - relevance/lib/*: third-party libraries for common tasks such as
-     html parsing, term frequency counting and sentence detection
-   * documents<br>
+     html parsing, term frequency counting and sentence detection <br>
 
+<br>
+
+   * documents<br>
      - docs/README: a readme file to decribe our methods<br>
 
      - docs/transcript: the transcript of 3 test cases on the course
-     website.<br><br>
+     website.<br>
+     
+     - relevance/Makefile: the makefile file <br>
 
-     Here is the list of all the files: <br>
-     .:<br>
-adb-project1<br>
-<br>
-./adb-project1:<br>
-docs<br>
-relevance<br>
-<br>
-./adb-project1/docs:<br>
-README<br>
-Readme_prj1.html<br>
-<br>
-./adb-project1/relevance:<br>
-analyzer<br>
-common-english-words.txt<br>
-indexer<br>
-key<br>
-Makefile<br>
-query<br>
-RelevanceFeedback.java<br>
-searcher<br>
-TestCase<br>
-TODO<br>
-transcript.txt<br>
-util<br>
-<br>
-./adb-project1/relevance/analyzer:<br>
-DefaultExpander.java<br>
-DisplayURLExpander.java<br>
-DocumentFrequencyExpander.java<br>
-DocumentTermsAnalyzer.java<br>
-Expander.java<br>
-MetaTermAnalyzer.java<br>
-SentenceTermAnalyzer.java<br>
-TermAnalyzer.java<br>
-TermRateExpander.java<br>
-WikiTermAnalyzer.java<br>
-WikiTitleExpander.java<br>
-<br>
-./adb-project1/relevance/indexer:<br>
-Indexer.java<br>
-TermFreq.java<br>
-<br>
-./adb-project1/relevance/query:<br>
-QueryRecord.java<br>
-QueryResultParser.java<br>
-<br>
-./adb-project1/relevance/searcher:<br>
-BingSearchProvider.java<br>
-SearchProvider.java<br>
-<br>
-./adb-project1/relevance/util:<br>
-Global.java<br>
-HtmlParser.java<br>
-Logger.java<br>
-MapValueComparator.java<br>
-StopWord.java<br>
-<br>
+     - docs/key: our Bing Api key
 
-<p>
+<br>
 </p>
 
 <b>2. How to run?</b>
 <p>
 
-   * Compile on clic machines
-     1) Go into directory relevance/
-     2) Compile with command:
-     	javac -cp ".:lib/*" RelevanceFeedback.java      
+   * Compile on clic machines <br>
+     1) Go into directory relevance/ <br>
+     2) option1: type 'make' <br>
+     3) option2: manually compile: <br>
+     	javac -cp ".:lib/*" RelevanceFeedback.java <br>
 
-   * Run tests
-     1) Go into directory relevance/
-     2) run command:
-     	java -cp ".:lib/*" RelevanceFeedback <ApiKey> <topK>
-     	<precision> <'query keywords'>
+</p>
+
+<p>
+
+   * Run tests <br>
+     1) Go into directory relevance/ <br>
+     2) option 1: run script ./run.sh apikey precision 'query keywords': <br>
+     3) option 2: type make run ARG1=apikey ARG2=precision ARG3='query keywords' <br>
+     4) option 3: manually run java <br>
+     	java -cp ".:lib/*" RelevanceFeedback apikey
+     	precision 'query keywords' <br>
         
-	Example: java -cp ".:lib/*" RelevanceFeedback your-bing-api 10
-	0.8 'bill gates'
+	Example: java -cp ".:lib/*" RelevanceFeedback your-bing-api
+	0.8 'bill gates' <br>
 
-     3) Interact with the UI for feedbacks and results
-     4) You can also check the result in Transcript_Log.txt
+     5) Interact with the UI for feedbacks and results <br>
+     6) You can also check the result in Transcript_Log.txt <br>
 
 </p>
 <p>
@@ -144,14 +98,6 @@ StopWord.java<br>
    analyzer assign a weight to each term according to different
    statistics of a term, e.g. its frequency in titles/descriptions. An
    analyzer may depend on some utitly classes to gather the statistics.<br>
-<br>
-   An overall system architecture is shown in the following figure.<br>
-<br>
-     SearchProvider<br>
-          | (default, wiki, url) (meta, wiki, sentence, term freq)<br>
-   RelevanceFeedback - Expander - TermAnalyzers<br>
-          | |<br>
-     User feedbacks Indexer, Html parser...<br>
 <br>
    Here, we have two important abstraction. The
    TermAnalyzer class is an abstract class that is used to assign
@@ -203,8 +149,9 @@ Goal of this phase is to find top 10 relevant terms from the positive pages mark
       computation of w_i(i) later.<br>
 <br>
 
+<ol>
 
-      - Term weighting<br>
+      <li><b>Term weighting</b><br></li>
 
       Here we introduce how we determine the term weight. No matter we
       are analyzing the meta data only or are analyzing the web pages,
@@ -230,8 +177,8 @@ Goal of this phase is to find top 10 relevant terms from the positive pages mark
       supposed to do.<br>
 <br>
 
-      
-      - Sources of relevant terms<br>
+ 
+      <li><b>Sources of relevant terms</b><br></li>
 
       Before we introduce each of our sources of finding relevant
       terms, we want to talk about normalization. Because we are using
@@ -242,8 +189,8 @@ Goal of this phase is to find top 10 relevant terms from the positive pages mark
       total number of tokens in entire document collection.<br>
 <br>
 
-
-      	* Meta info<br>
+<ul>
+      	<li><b><i>Meta info</i></b><br></li>
 
 	The first source of relevant terms comes from the meta
 	information, that is the title, url and description returned 
@@ -259,7 +206,7 @@ Goal of this phase is to find top 10 relevant terms from the positive pages mark
 <br>
 
 
-        * Term frequency<br>
+        <li><b><i>Term frequency</i></b><br></li>
 
 	In this part, instead of gather term frequency from meta
 	information, we look at the web pages of the relevant
@@ -267,7 +214,7 @@ Goal of this phase is to find top 10 relevant terms from the positive pages mark
 
 
       
-	* Wikipedia pages<br>
+	<li><b><i>Wikipedia pages</i></b><br></li>
 
 	Wikipedia page is a perfect reference to discriminate
 	ambiguous terms. Terms are divided into different categories
@@ -290,7 +237,7 @@ Goal of this phase is to find top 10 relevant terms from the positive pages mark
 <br>
 
 
-      	* Sentence-scope co-occurrence<br>
+      	<li><i><b>Sentence-scope co-occurrence</b></i><br></li>
 
 	We also try to consider term proximity in weighting. A term
 	appears close to the query keywords is more likely to be
@@ -307,8 +254,10 @@ Goal of this phase is to find top 10 relevant terms from the positive pages mark
 	Specifically, we combine all the sentences in relevant pages
 	that contain at least one query keyword into a single
 	document. We determine term weight based on this single document.<br>
-
+</ul>
 </p>
+
+</ol>
 
 <b>4.2 Query expansion</b><br>
 

@@ -203,7 +203,7 @@ public class RelevanceFeedback {
 	 */
 	private static void readArguments(String[] args) {
 		// check argument length
-		if (args.length < 3) {
+		if (args.length != 3) {
 			System.err.println("Usage: RelevanceFeedback <ApiKey> <precision> <'query'>");
 			System.exit(1);
 		}
@@ -221,11 +221,8 @@ public class RelevanceFeedback {
 			System.err.println("Please input a valid argument");
 			System.exit(1);
 		}
-		Vector<String> q = new Vector<String>();
-		for (int i = 2; i < args.length; i++) {
-			q.add(args[i]);
-		}
-		basicQuery = q.toArray(new String[0]);
+
+		basicQuery = args[2].split(" ");
 	}
 	
 	// Print summary after we meet the precision requirement
