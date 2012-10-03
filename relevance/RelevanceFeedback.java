@@ -21,7 +21,7 @@ public class RelevanceFeedback {
 	private static double targetPrecision;
 	private static String[] basicQuery;
 	
-	// Usage: RelevanceFeedback <ApiKey> <topK> <precision> <'query'>
+	// Usage: RelevanceFeedback <ApiKey> <precision> <'query'>
 	public static void main(String[] args) throws Exception {					
 		
 		Logger myLogger = Logger.getInstance();
@@ -203,16 +203,15 @@ public class RelevanceFeedback {
 	 */
 	private static void readArguments(String[] args) {
 		// check argument length
-		if (args.length < 4) {
-			System.err.println("Usage: RelevanceFeedback <ApiKey> <topK> <precision> <'query'>");
+		if (args.length < 3) {
+			System.err.println("Usage: RelevanceFeedback <ApiKey> <precision> <'query'>");
 			System.exit(1);
 		}
 
 		// get command line arguments
 		apiKey = args[0];
 		try {
-			topK = Integer.parseInt(args[1]);
-			targetPrecision = Double.parseDouble(args[2]);
+			targetPrecision = Double.parseDouble(args[1]);
 			if (targetPrecision < 0 || targetPrecision > 1) { // check precision scope
 				System.err.println("Please input a valid precision (0 <= precision <= 1)");
 				System.exit(1);
@@ -223,28 +222,10 @@ public class RelevanceFeedback {
 			System.exit(1);
 		}
 		Vector<String> q = new Vector<String>();
-		for (int i = 3; i < args.length; i++) {
-			if (i == 3) {
-				if (!args[i].startsWith("'")) {
-					System.err.println("Please input a valid query, the query should be enclosed with \"'\"");
-					System.exit(1);
-				}
-			
-				q.add(args[i].replaceAll("'", ""));
-				//q.add(args[i].substring(1, args[i].length()));
-			}
-			else if ( i == args.length - 1 ) {
-				if (!args[i].endsWith("'")) {
-					System.err.println("Please input a valid query, the query should be enclosed with \"'\"");
-					System.exit(1);
-				}
-				q.add(args[i].replaceAll("'", ""));
-			//q.add(args[i].substring(0, args[i].length()-1));
-			}
-			else
-				q.add(args[i]);
-			}
-			basicQuery = q.toArray(new String[0]);
+		for (int i = 2; i < args.length; i++) {
+			q.add(args[i]);
+		}
+		basicQuery = q.toArray(new String[0]);
 	}
 	
 	// Print summary after we meet the precision requirement

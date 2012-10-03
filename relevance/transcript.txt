@@ -1,0 +1,528 @@
+Started: 2012/10/02 23:13:28
+
+===========================================
+Round 1
+Query: snow leopard 
+
+Result 1
+Relevant: NO
+[
+    URL: en.wikipedia.org/wiki/Uncia_(genus)
+    Title: Snow leopard - Wikipedia, the free encyclopedia
+    Summary: The snow leopard (Panthera uncia or Uncia uncia) is a moderately large cat native to the mountain ranges of Central Asia. The classification of this species has been ...
+]
+
+Result 2
+Relevant: YES
+[
+    URL: www.apple.com/osx
+    Title: Apple - OS X Mountain Lion - Move your Mac even further ahead.
+    Summary: OS X Mountain Lion makes the Mac even better. And with so many new features, now the Mac works even better with iPhone, iPad, and iPod touch.
+]
+
+Result 3
+Relevant: NO
+[
+    URL: animals.nationalgeographic.com/animals/mammals/snow-leopard
+    Title: Snow Leopards, Snow Leopard Pictures, Snow Leopard Facts ...
+    Summary: Native to the Central Asian mountains, the snow leopard is a rare sight, with only about 6,000 left in the wild. They are hunted for their beautiful, warm fur and for ...
+]
+
+Result 4
+Relevant: NO
+[
+    URL: www.amazon.com/s?ie=UTF8&keywords=snow%20leopard&page=1&rh=n%3A...
+    Title: Amazon.com: snow leopard - Clothing & Accessories
+    Summary: Outer Rebel Fashion Deluxe Animal Hats with Attached Scarf & Mittens- Snow Leopard
+]
+
+Result 5
+Relevant: NO
+[
+    URL: www.snowleopard.org
+    Title: Snow Leopard Trust | Saving Snow Leopards
+    Summary: Located in Seattle, they work to protect the endangered snow leopard and its Central Asian habitat.
+]
+
+Result 6
+Relevant: YES
+[
+    URL: en.wikipedia.org/wiki/Mac_OS_X_Snow_Leopard
+    Title: Mac OS X Snow Leopard - Wikipedia, the free encyclopedia
+    Summary: Mac OS X Snow Leopard (version 10.6) is the seventh major release of Mac OS X, Apple's desktop and server operating system for Macintosh computers. Snow Leopard was ...
+]
+
+Result 7
+Relevant: NO
+[
+    URL: www.ebay.com/sch/i.html?_nkw=snow+leopard
+    Title: snow leopard | eBay - Electronics, Cars, Fashion, Collectibles ...
+    Summary: Find snow leopard from a vast selection of Operating Systems. Shop eBay!
+]
+
+Result 8
+Relevant: YES
+[
+    URL: www.amazon.com/s?ie=UTF8&page=1&rh=i%3Aaps%2Ck%3Asnow%20leopard
+    Title: Amazon.com: snow leopard
+    Summary: Office Mac Home and Student 2011 - Family Pack (1 User/3 Installs) [Download] by Microsoft (Software Download - Oct. 26, 2010) - Mac OS X 10.5 Leopard / 10.6 Snow ...
+]
+
+Result 9
+Relevant: YES
+[
+    URL: store.apple.com/us/search?find=mac+os+x+10.6+snow+leopard
+    Title: Snow Leopard
+    Summary: 
+]
+
+Result 10
+Relevant: NO
+[
+    URL: www.sandiegozoo.org/animalbytes/t-snow_leopard.html
+    Title: San Diego Zoo's Animal Bytes: Snow Leopard
+    Summary: Get fun and interesting snow leopard facts in an easy-to-read style from the San Diego Zoo's Animal Bytes. Buy tickets online and plan a visit to the Zoo or Safari Park.
+]
+
+Precision : 0.4
+
+
+===========================================
+Round 2
+Query: snow leopard mac 
+
+Result 1
+Relevant: YES
+[
+    URL: www.apple.com/osx
+    Title: Apple - OS X Mountain Lion - Move your Mac even further ahead.
+    Summary: OS X Mountain Lion makes the Mac even better. And with so many new features, now the Mac works even better with iPhone, iPad, and iPod touch.
+]
+
+Result 2
+Relevant: YES
+[
+    URL: en.wikipedia.org/wiki/Mac_OS_X_Snow_Leopard
+    Title: Mac OS X Snow Leopard - Wikipedia, the free encyclopedia
+    Summary: Mac OS X Snow Leopard (version 10.6) is the seventh major release of Mac OS X, Apple's desktop and server operating system for Macintosh computers. Snow Leopard was ...
+]
+
+Result 3
+Relevant: YES
+[
+    URL: www.apple.com/support/snowleopard
+    Title: Apple - Support - Snow Leopard
+    Summary: Get help with installing and using Snow Leopard, setting up email accounts, connecting to the Internet, troubleshooting, and much more.
+]
+
+Result 4
+Relevant: YES
+[
+    URL: store.apple.com/us/search?find=mac+os+x+10.6+snow+leopard
+    Title: Snow Leopard
+    Summary: 
+]
+
+Result 5
+Relevant: YES
+[
+    URL: www.ebay.com/sch/i.html?_nkw=snow+leopard+mac
+    Title: snow leopard mac | eBay - Electronics, Cars, Fashion, Collectibles ...
+    Summary: Find snow leopard mac from a vast selection of Operating Systems. Shop eBay!
+]
+
+Result 6
+Relevant: YES
+[
+    URL: www.ebay.com/sch/i.html?_nkw=mac+snow+leopard
+    Title: mac snow leopard | eBay - Electronics, Cars, Fashion, Collectibles ...
+    Summary: Find mac snow leopard from a vast selection of Operating Systems. Shop eBay!
+]
+
+Result 7
+Relevant: YES
+[
+    URL: www.cnet.com/mac-os-x-snow-leopard
+    Title: Mac OS X - Apple Mac Lion and Snow Leopard reviews and news - CNET.com
+    Summary: CNET's comprehensive Mac OS X Lion and OS X Snow Leopard coverage: Get in-depth analysis of Lion's new features, how much it will cost you, what you'll ...
+]
+
+Result 8
+Relevant: YES
+[
+    URL: www.amazon.com/s?ie=UTF8&page=1&rh=i%3Aaps%2Ck%3Asnow%20leopard
+    Title: Amazon.com: snow leopard
+    Summary: Office Mac Home and Student 2011 - Family Pack (1 User/3 Installs) [Download] by Microsoft (Software Download - Oct. 26, 2010) - Mac OS X 10.5 Leopard / 10.6 Snow ...
+]
+
+Result 9
+Relevant: YES
+[
+    URL: www.amazon.com/Mac-version-10-6-3-Snow-Leopard/dp/B001AMHWP8
+    Title: Amazon.com: Mac OS X version 10.6.3 Snow Leopard: Software
+    Summary: Mac OS X Snow Leopard is an even more powerful and refined version of the world’s most advanced operating system. In ways big and small, it gets faster, more ...
+]
+
+Result 10
+Relevant: YES
+[
+    URL: www.cio.com.au/books/product/mac-os-x-snow-leopard-digital...
+    Title: Mac OS X Snow Leopard Digital Classroom - Books - CIO
+    Summary: A complete training package for Apple's new operating system. Mac OS X is used around the world, and users are eager to get started with Apple's newest operating ...
+]
+
+Precision : 1.0
+
+Ended: 2012/10/02 23:14:25
+Started: 2012/10/02 23:14:34
+
+===========================================
+Round 1
+Query: gates 
+
+Result 1
+Relevant: NO
+[
+    URL: gates.com
+    Title: Powering Progress™ in belts, hose & hydraulics
+    Summary: Gates Corporation is Powering Progress™ in the Oil & Gas, Energy, Mining, Marine, Agriculture, Transportation and Automotive Industries.
+]
+
+Result 2
+Relevant: NO
+[
+    URL: www.gates.com/?location_id=542
+    Title: Gates Snowmobile & ATV - Powering Progress™ in belts, hose ...
+    Summary: Gates Corporation is Powering Progress™ in the Oil & Gas, Energy, Mining, Marine, Agriculture, Transportation and Automotive Industries.
+]
+
+Result 3
+Relevant: YES
+[
+    URL: en.wikipedia.org/wiki/Bill_Gates
+    Title: Bill Gates - Wikipedia, the free encyclopedia
+    Summary: William Henry "Bill" Gates III (born October 28, 1955) is an American business magnate and philanthropist. Gates is the former chief executive and current chairman of ...
+]
+
+Result 4
+Relevant: YES
+[
+    URL: https://www.gmsp.org
+    Title: ::. The Gates Millennium Scholars .::
+    Summary: THE GATES MILLENNIUM SCHOLARS PROGRAM. The Gates Millennium Scholars (GMS) Program selects 1,000 talented students each year to receive a good-through-graduation ...
+]
+
+Result 5
+Relevant: YES
+[
+    URL: news.yahoo.com/gates-windows-8-system-very-exciting-161811335...
+    Title: Gates: New Windows 8 system is 'very exciting' - Yahoo! News
+    Summary: NEW YORK (AP) — Microsoft founder Bill Gates on Thursday called the new Windows 8 operating system scheduled for release next month "a very exciting new product ...
+]
+
+Result 6
+Relevant: YES
+[
+    URL: www.gatesfoundation.org/Pages/home.aspx
+    Title: Bill & Melinda Gates Foundation
+    Summary: Global Luminaries Issue Urgent Call for Polio-Free World Read Bill Gates' speech at the UN Event
+]
+
+Result 7
+Relevant: NO
+[
+    URL: en.wikipedia.org/wiki/Robert_Gates
+    Title: Robert Gates - Wikipedia, the free encyclopedia
+    Summary: Robert Michael Gates (born September 25, 1943) is a retired civil servant and university president who served as the 22nd United States Secretary of Defense from 2006 ...
+]
+
+Result 8
+Relevant: NO
+[
+    URL: www.gatesbbq.com
+    Title: Gates Bar B.Q.
+    Summary: Offers BBQ ribs and other meats. Recipes, online sales of BBQ sauces and spices, and a history of the chain. Locations in Kansas and Missouri, United States.
+]
+
+Result 9
+Relevant: NO
+[
+    URL: www.gatesinc.com
+    Title: GATES, Florida construction, development, brokerage, leasing ...
+    Summary: Gates, Inc. - Providing South Florida construction, development, brokerage, leasing, and property management services.
+]
+
+Result 10
+Relevant: YES
+[
+    URL: www.microsoft.com/en-us/news/exec/billg
+    Title: Bill Gates: Chairman - Microsoft Corporation: Software ...
+    Summary: Updated: Aug. 3, 2011. William (Bill) H. Gates is chairman of Microsoft Corporation, the worldwide leader in software, services and solutions that help ...
+]
+
+Precision : 0.5
+
+
+===========================================
+Round 2
+Query: bill gates 
+
+Result 1
+Relevant: YES
+[
+    URL: www.thegatesnotes.com
+    Title: The Official Site of Bill Gates - The Gates Notes
+    Summary: How do we help raise the profile on polio when there are so many other topics competing for attention?
+]
+
+Result 2
+Relevant: YES
+[
+    URL: en.wikipedia.org/wiki/Bill_Gates
+    Title: Bill Gates - Wikipedia, the free encyclopedia
+    Summary: William Henry "Bill" Gates III (born October 28, 1955) is an American business magnate and philanthropist. Gates is the former chief executive and current ...
+]
+
+Result 3
+Relevant: YES
+[
+    URL: www.biography.com/people/bill-gates-9307520
+    Title: Bill Gates Biography - Facts, Birthday, Life Story - Biography.com
+    Summary: Biography.com tracks Bill Gates from his early interest in computer programming to his place as the founder of Microsoft, the world's largest software business.
+]
+
+Result 4
+Relevant: YES
+[
+    URL: www.microsoft.com/en-us/news/exec/billg
+    Title: Bill Gates: Chairman - Microsoft Corporation: Software ...
+    Summary: Updated: Aug. 3, 2011. William (Bill) H. Gates is chairman of Microsoft Corporation, the worldwide leader in software, services and solutions that help ...
+]
+
+Result 5
+Relevant: YES
+[
+    URL: www.forbes.com/profile/bill-gates
+    Title: Bill Gates - Forbes - Information for the World's Business Leaders ...
+    Summary: Bill Gates on Forbes - #1 Forbes 400, #2 Billionaires, #5 Powerful People
+]
+
+Result 6
+Relevant: YES
+[
+    URL: www.amazon.com/s?ie=UTF8&keywords=Bill%20Gates&page=1&rh=n%3A...
+    Title: Amazon.com: Bill Gates: Books
+    Summary: Discover books, read about the author, find related products, and more. Visit the page.
+]
+
+Result 7
+Relevant: YES
+[
+    URL: www.amazon.com/s?ie=UTF8&keywords=Bill%20Gates
+    Title: Amazon.com: Bill Gates
+    Summary: Pirates of Silicon Valley by Anthony Michael Hall, Noah Wyle, Joey Slotnick and Martyn Burke (Amazon Instant Video)
+]
+
+Result 8
+Relevant: YES
+[
+    URL: www.gatesfoundation.org
+    Title: Bill & Melinda Gates Foundation
+    Summary: Global Luminaries Issue Urgent Call for Polio-Free World Read Bill Gates' speech at the UN Event
+]
+
+Result 9
+Relevant: NO
+[
+    URL: https://twitter.com/billgates
+    Title: Bill Gates (BillGates) on Twitter
+    Summary: Instantly connect to what's most important to you. Follow your friends, experts, favorite celebrities, and breaking news.
+]
+
+Result 10
+Relevant: YES
+[
+    URL: www.gatesfoundation.org/leadership/Pages/bill-gates.aspx
+    Title: Bill Gates – Bill & Melinda Gates Foundation
+    Summary: Bill Gates shapes and approves foundation strategies, reviews results, advocates for the foundation’s issues, and helps set the overall direction of the organization.
+]
+
+Precision : 0.9
+
+Ended: 2012/10/02 23:15:31
+Started: 2012/10/02 23:15:35
+
+===========================================
+Round 1
+Query: bill 
+
+Result 1
+Relevant: NO
+[
+    URL: www.bill.com
+    Title: Business Bill pay | Accounts Payable & Online invoicing | Bill.com
+    Summary: Bill.com streamlines and automates your business bill payment, invoicing processes and gives you a complete visibility to your cash flow at any time
+]
+
+Result 2
+Relevant: NO
+[
+    URL: dictionary.reference.com/browse/bill
+    Title: Bill | Define Bill at Dictionary.com
+    Summary: noun 1. a statement of money owed for goods or services supplied: He paid the hotel bill when he checked out. 2. a piece of paper money worth a specified amount: a ...
+]
+
+Result 3
+Relevant: NO
+[
+    URL: en.wikipedia.org/wiki/Bill_(proposed_law)
+    Title: Bill (law) - Wikipedia, the free encyclopedia
+    Summary: A bill is a proposed law under consideration by a legislature. A bill does not become law until it is passed by the legislature and, in most cases, approved by the ...
+]
+
+Result 4
+Relevant: YES
+[
+    URL: en.wikipedia.org/wiki/Bill_Gates
+    Title: Bill Gates - Wikipedia, the free encyclopedia
+    Summary: William Henry "Bill" Gates III (born October 28, 1955) is an American business magnate and philanthropist. Gates is the former chief executive and current chairman of ...
+]
+
+Result 5
+Relevant: NO
+[
+    URL: www.billoreilly.com
+    Title: Bill O'Reilly Official Home On The Web
+    Summary: BillOReilly.com is the home of Bill O'Reilly on the web.
+]
+
+Result 6
+Relevant: NO
+[
+    URL: www.thefreedictionary.com/bill
+    Title: bill - definition of bill by the Free Online Dictionary, Thesaurus ...
+    Summary: bill 1 (b l) n. 1. An itemized list or statement of fees or charges. 2. A statement or list of particulars, such as a theater program or menu. 3.
+]
+
+Result 7
+Relevant: NO
+[
+    URL: left4dead.wikia.com/wiki/Bill
+    Title: Bill - The Left 4 Dead Wiki - Left 4 Dead, Left 4 Dead 2 ...
+    Summary: William "Bill" Overbeck is one of the four playable Survivors in Left 4 Dead. He is a Vietnam...
+]
+
+Result 8
+Relevant: NO
+[
+    URL: www.billlevkoff.com
+    Title: Bridesmaid Dresses and Formal Dresses by Bill Levkoff in New York
+    Summary: Bridesmaid dresses, formal dresses and plus size bridesmaid dresses by New York designer Bill Levkoff. We have been dressing bridesmaids for over 60 years. View our ...
+]
+
+Result 9
+Relevant: NO
+[
+    URL: en.wiktionary.org/wiki/bill
+    Title: bill - Wiktionary
+    Summary: Any of various bladed or pointed hand weapons, originally designating an Anglo-Saxon sword, and later a weapon of infantry, especially in the 14th and 15th ...
+]
+
+Result 10
+Relevant: NO
+[
+    URL: www.thebill.com
+    Title: The Bill - Home
+    Summary: Official site. News, plots, chat, merchandise and glimpses behind the scenes.
+]
+
+Precision : 0.1
+
+
+===========================================
+Round 2
+Query: bill gates 
+
+Result 1
+Relevant: YES
+[
+    URL: www.thegatesnotes.com
+    Title: The Official Site of Bill Gates - The Gates Notes
+    Summary: How do we help raise the profile on polio when there are so many other topics competing for attention?
+]
+
+Result 2
+Relevant: YES
+[
+    URL: en.wikipedia.org/wiki/Bill_Gates
+    Title: Bill Gates - Wikipedia, the free encyclopedia
+    Summary: William Henry "Bill" Gates III (born October 28, 1955) is an American business magnate and philanthropist. Gates is the former chief executive and current ...
+]
+
+Result 3
+Relevant: YES
+[
+    URL: www.biography.com/people/bill-gates-9307520
+    Title: Bill Gates Biography - Facts, Birthday, Life Story - Biography.com
+    Summary: Biography.com tracks Bill Gates from his early interest in computer programming to his place as the founder of Microsoft, the world's largest software business.
+]
+
+Result 4
+Relevant: YES
+[
+    URL: www.microsoft.com/en-us/news/exec/billg
+    Title: Bill Gates: Chairman - Microsoft Corporation: Software ...
+    Summary: Updated: Aug. 3, 2011. William (Bill) H. Gates is chairman of Microsoft Corporation, the worldwide leader in software, services and solutions that help ...
+]
+
+Result 5
+Relevant: YES
+[
+    URL: www.forbes.com/profile/bill-gates
+    Title: Bill Gates - Forbes - Information for the World's Business Leaders ...
+    Summary: Bill Gates on Forbes - #1 Forbes 400, #2 Billionaires, #5 Powerful People
+]
+
+Result 6
+Relevant: YES
+[
+    URL: www.amazon.com/s?ie=UTF8&keywords=Bill%20Gates&page=1&rh=n%3A...
+    Title: Amazon.com: Bill Gates: Books
+    Summary: Discover books, read about the author, find related products, and more. Visit the page.
+]
+
+Result 7
+Relevant: YES
+[
+    URL: www.amazon.com/s?ie=UTF8&keywords=Bill%20Gates
+    Title: Amazon.com: Bill Gates
+    Summary: Pirates of Silicon Valley by Anthony Michael Hall, Noah Wyle, Joey Slotnick and Martyn Burke (Amazon Instant Video)
+]
+
+Result 8
+Relevant: YES
+[
+    URL: www.gatesfoundation.org
+    Title: Bill & Melinda Gates Foundation
+    Summary: Global Luminaries Issue Urgent Call for Polio-Free World Read Bill Gates' speech at the UN Event
+]
+
+Result 9
+Relevant: NO
+[
+    URL: https://twitter.com/billgates
+    Title: Bill Gates (BillGates) on Twitter
+    Summary: Instantly connect to what's most important to you. Follow your friends, experts, favorite celebrities, and breaking news.
+]
+
+Result 10
+Relevant: YES
+[
+    URL: www.gatesfoundation.org/leadership/Pages/bill-gates.aspx
+    Title: Bill Gates – Bill & Melinda Gates Foundation
+    Summary: Bill Gates shapes and approves foundation strategies, reviews results, advocates for the foundation’s issues, and helps set the overall direction of the organization.
+]
+
+Precision : 0.9
+
+Ended: 2012/10/02 23:16:08
