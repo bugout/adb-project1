@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
     "http://www.w3.org/TR/html4/loose.dtd">
 <html><head>
-<title>Untitled</title>
+<title>Query Expansion - CS 6111 (Project 1, Fall 2012)</title>
 <meta http-equiv="Content-type" content="text/html; charset=iso-8859-1">
 </head>
 <body bgcolor="#FFFFFF">
@@ -13,7 +13,7 @@ Readme files for CS6111 Project 1<br>
 
 Group members:<br>
 
-      Anuj Arora (your UNI)<br>
+      Anuj Arora (aa2583)<br>
 
       Jiacheng Yang (jy2522)<br>
 
@@ -44,7 +44,66 @@ Group members:<br>
      - docs/README: a readme file to decribe our methods<br>
 
      - docs/transcript: the transcript of 3 test cases on the course
-     website.<br>
+     website.<br><br>
+
+     Here is the list of all the files: <br>
+     .:<br>
+adb-project1<br>
+<br>
+./adb-project1:<br>
+docs<br>
+relevance<br>
+<br>
+./adb-project1/docs:<br>
+README<br>
+Readme_prj1.html<br>
+<br>
+./adb-project1/relevance:<br>
+analyzer<br>
+common-english-words.txt<br>
+indexer<br>
+key<br>
+Makefile<br>
+query<br>
+RelevanceFeedback.java<br>
+searcher<br>
+TestCase<br>
+TODO<br>
+transcript.txt<br>
+util<br>
+<br>
+./adb-project1/relevance/analyzer:<br>
+DefaultExpander.java<br>
+DisplayURLExpander.java<br>
+DocumentFrequencyExpander.java<br>
+DocumentTermsAnalyzer.java<br>
+Expander.java<br>
+MetaTermAnalyzer.java<br>
+SentenceTermAnalyzer.java<br>
+TermAnalyzer.java<br>
+TermRateExpander.java<br>
+WikiTermAnalyzer.java<br>
+WikiTitleExpander.java<br>
+<br>
+./adb-project1/relevance/indexer:<br>
+Indexer.java<br>
+TermFreq.java<br>
+<br>
+./adb-project1/relevance/query:<br>
+QueryRecord.java<br>
+QueryResultParser.java<br>
+<br>
+./adb-project1/relevance/searcher:<br>
+BingSearchProvider.java<br>
+SearchProvider.java<br>
+<br>
+./adb-project1/relevance/util:<br>
+Global.java<br>
+HtmlParser.java<br>
+Logger.java<br>
+MapValueComparator.java<br>
+StopWord.java<br>
+<br>
 
 <p>
 </p>
@@ -70,8 +129,51 @@ Group members:<br>
      4) You can also check the result in Transcript_Log.txt
 
 </p>
+<p>
 
-
+<b>3. System design</b></br>
+   Our system is decoupled into several modules. The main class
+   RelevanceFeedback in the default package is mainly for user
+   interface and interacting with other modules. The main class read
+   user's query from commandline and issue the query to a
+   SearchProvider, in this case, the Bing API. It then presents the
+   query result to user to get feedbacks. If we haven't reach the
+   desired precision, RelevanceFeedback calls an Expander to expand
+   the query and search with the revised query. An expander chooses
+   words to expand based on the results of several analyzers. An
+   analyzer assign a weight to each term according to different
+   statistics of a term, e.g. its frequency in titles/descriptions. An
+   analyzer may depend on some utitly classes to gather the statistics.<br>
+<br>
+   An overall system architecture is shown in the following figure.<br>
+<br>
+     SearchProvider<br>
+          | (default, wiki, url) (meta, wiki, sentence, term freq)<br>
+   RelevanceFeedback - Expander - TermAnalyzers<br>
+          | |<br>
+     User feedbacks Indexer, Html parser...<br>
+<br>
+   Here, we have two important abstraction. The
+   TermAnalyzer class is an abstract class that is used to assign
+   weights to terms. While the Expander class is an abstract class
+   that take the relevant terms (high weight terms) from term
+   analyzers and decide which words to expand and what is the right order of
+   the keywords.<br>
+<br>
+   We can easily plug in or replace term analysis and query expansion
+   methods by inheriting the abstract class. We can even mix various
+   methods together by taking advantage of their common interfaces.<br>
+<br>
+   In the Searcher package, we also have a abstract class for
+   SearchProvider, in case that we may want to use other search
+   engines other than Bing to finish the task.<br>
+<br>
+   Some utitlies class about query result parsing, inverted index
+   building can be found in query and indexer package. We also use
+   some third-party libraries to do the mundane jobs (all the
+   libraries we use are listed in the appendix of this doc).<br>
+<br>
+</p>
 
 <b>4. Query modification method</b>
 <p>
