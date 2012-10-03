@@ -45,7 +45,7 @@ public class SentenceTermAnalyzer extends TermAnalyzer {
 	private String[] extractSentences(String text) {
 		SentenceModel model = null;
 		try {
-			InputStream modelIn = new FileInputStream("/usr/local/lib/en-sent.bin");
+			InputStream modelIn = new FileInputStream("lib/en-sent.bin");
 			model = new SentenceModel(modelIn);		
 		}
 		catch (IOException e) {
